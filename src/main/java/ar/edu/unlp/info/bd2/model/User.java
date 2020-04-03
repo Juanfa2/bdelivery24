@@ -12,7 +12,7 @@ import ar.edu.unlp.info.bd2.config.HibernateConfiguration;
 public class User {
 	
 	@Id
-	@Column(name="id")
+	@GeneratedValue
 	private Long id;
 	
 	@Column(name="username")

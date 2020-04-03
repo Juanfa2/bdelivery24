@@ -10,7 +10,7 @@ import ar.edu.unlp.info.bd2.config.HibernateConfiguration;
 @Table(name="Products")
 public class Product {
 	@Id
-	@Column(name="id")
+	@GeneratedValue
 	private Long id;
 	
 	@Column(name="name")
@@ -22,20 +22,17 @@ public class Product {
 	@Column(name="weight")
 	private Float weight; 
 	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "supplier_id")
 	private Supplier supplier;
 	
-	@Column(name="supplier_id")
-	private Long supplierId;
+	
 	
 	public Product (String name, Float price, Float weight, Supplier supplier) {
 		this.setName(name);
 		this.setPrice(price);
 		this.setWeight(weight);
 		this.setSupplier(supplier);
-		this.setSupplierID(this.supplier.getId());
-	}
-	public void setSupplierID(Long id) {
-		this.supplierId = id;
 	}
 
 	public void setName(String name) {

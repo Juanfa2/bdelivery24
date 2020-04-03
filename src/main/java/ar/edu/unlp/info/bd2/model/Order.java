@@ -3,6 +3,7 @@ import javax.persistence.*;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
+import java.util.*;
 import ar.edu.unlp.info.bd2.config.AppConfig;
 import ar.edu.unlp.info.bd2.config.HibernateConfiguration;
 
@@ -22,17 +23,26 @@ public class Order {
 	@Column(name="coordY")
 	private Float coordY;
 	
-	@Column(name="client_id")
-	private Long clientId;
 	
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="client_id")
 	private User client;
 	
 	@Id
-	@Column(name="id")
+	@GeneratedValue
 	private Long id;
 	
+	
+	private Long quantity;
+	
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="delivery_id")
+	private User deliveryUser;
+	
+	private ArrayList<Product> products = new ArrayList<Product>();
+	
 	@Column(name="status")
-	private String status;
+	private ArrayList<String> status = new ArrayList<String>();
 	
 	public Order(Date dateOfOrder, String address, Float coordX, Float coordY, User client ) {
 		this.setdateOfOrder(dateOfOrder);
@@ -40,12 +50,11 @@ public class Order {
 		this.setCoordX(coordX);
 		this.setCoordY(coordY);
 		this.setClient(client);
-		this.status = "Pending";
-		this.setClientId(this.getDeliveryUser().getId());
+		this.setStatus("Pending");
 		
 	}
-	public void setClientId (Long id) {
-		this.clientId = id;
+	public void setStatus(String status) {
+		this.status.add("status");
 	}
 	
 	public void setdateOfOrder(Date dateOfOrder) {
@@ -63,8 +72,16 @@ public class Order {
 	public void setClient(User client) {
 		this.client = client;
 	}
-	public void setStatus(String status) {
-		this.status = status;
+	
+	public void setProducts(Product product) {
+		this.products.add(product);
+	}
+	
+	public void sumCuantity(Long cuantity) {
+		this.quantity += quantity;
+	}
+	public void setDeliveryUser(User deliveryUser) {
+		this.deliveryUser = deliveryUser;
 	}
 	
 	public Date getDateOfOrder () {
@@ -82,18 +99,25 @@ public class Order {
 		return this.coordY;
 	}
 
-	public User getDeliveryUser () {
+	public User getClient () {
 		return this.client;
 	}
 	
 	public Long getId () {
 		return this.id;
 	}
-	public String getStatus () {
+	public ArrayList<String>  getStatus () {
 		return this.status;
 	}
-	public Long getCLientId () {
-		return this.clientId;
+	
+	public ArrayList<Product> getProducts() {
+		return this.products;
 	}
+	
+	public User getDeliveryUser() {
+		return this.deliveryUser;
+	}
+	
+	
 
 }

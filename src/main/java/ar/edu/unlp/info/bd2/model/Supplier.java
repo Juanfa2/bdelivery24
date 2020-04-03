@@ -11,7 +11,7 @@ import ar.edu.unlp.info.bd2.config.HibernateConfiguration;
 public class Supplier {
 	
 	@Id
-	@Column(name="id")
+	@GeneratedValue
 	private Long id;
 	
 	@Column(name="name")
