@@ -7,7 +7,7 @@ import ar.edu.unlp.info.bd2.config.AppConfig;
 import ar.edu.unlp.info.bd2.config.HibernateConfiguration;
 
 @Entity
-@Table(name="productoOrders")
+@Table(name="productOrders")
 public class Order {
 	
 	@Column(name="dateOfOrder")
@@ -22,7 +22,9 @@ public class Order {
 	@Column(name="coordY")
 	private Float coordY;
 	
-	@Column(name="client")
+	@Column(name="client_id")
+	private Long clientId;
+	
 	private User client;
 	
 	@Id
@@ -39,6 +41,11 @@ public class Order {
 		this.setCoordY(coordY);
 		this.setClient(client);
 		this.status = "Pending";
+		this.setClientId(this.getDeliveryUser().getId());
+		
+	}
+	public void setClientId (Long id) {
+		this.clientId = id;
 	}
 	
 	public void setdateOfOrder(Date dateOfOrder) {
@@ -75,7 +82,7 @@ public class Order {
 		return this.coordY;
 	}
 
-	public User getClient () {
+	public User getDeliveryUser () {
 		return this.client;
 	}
 	
@@ -84,6 +91,9 @@ public class Order {
 	}
 	public String getStatus () {
 		return this.status;
+	}
+	public Long getCLientId () {
+		return this.clientId;
 	}
 
 }
