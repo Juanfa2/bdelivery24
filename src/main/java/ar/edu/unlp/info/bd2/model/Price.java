@@ -7,12 +7,32 @@ import java.util.*;
 import ar.edu.unlp.info.bd2.config.AppConfig;
 import ar.edu.unlp.info.bd2.config.HibernateConfiguration;
 
+@Entity
+@Table(name="prices")
 public class Price {
 	
+	@Id
+	@GeneratedValue
 	private Long id;
+	
+	@Column(name="price")
 	private Float price;
+	
+	@Column(name="startDate")
 	private Date startDate;
 	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="product_id")
+	private Product product;
+	
+	public Product getProduct() {
+		return product;
+	}
+
+	public void setProduct(Product product) {
+		this.product = product;
+	}
+
 	public Price (Float price, Date startDate) {
 		this.setPrice(price);
 		this.setStartDate(startDate);

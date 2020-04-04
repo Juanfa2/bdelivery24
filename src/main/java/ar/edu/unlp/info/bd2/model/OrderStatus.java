@@ -7,10 +7,30 @@ import java.util.*;
 import ar.edu.unlp.info.bd2.config.AppConfig;
 import ar.edu.unlp.info.bd2.config.HibernateConfiguration;
 
-
+@Entity
+@Table(name = "orderStatus")
 public class OrderStatus {
+	
+	@Id
+	@GeneratedValue
 	private Long id;
+	
+	@Column(name = "status")
 	private String status;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name= "order_id")
+	private Order order;
+	
+	public Order getOrder() {
+		return order;
+	}
+
+	public void setOrder(Order order) {
+		this.order = order;
+	}
+
+	
 	
 	public OrderStatus(String status) {
 		this.setStatus(status);
