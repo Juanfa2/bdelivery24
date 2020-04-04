@@ -42,7 +42,8 @@ public class Order {
 	private ArrayList<Product> products = new ArrayList<Product>();
 	
 	@Column(name="status")
-	private ArrayList<String> status = new ArrayList<String>();
+	private ArrayList<OrderStatus> orderStatus = new ArrayList<>();
+	
 	
 	public Order(Date dateOfOrder, String address, Float coordX, Float coordY, User client ) {
 		this.setdateOfOrder(dateOfOrder);
@@ -54,7 +55,8 @@ public class Order {
 		
 	}
 	public void setStatus(String status) {
-		this.status.add("status");
+		OrderStatus st = new OrderStatus(status);
+		this.orderStatus.add(st);
 	}
 	
 	public void setdateOfOrder(Date dateOfOrder) {
@@ -106,8 +108,8 @@ public class Order {
 	public Long getId () {
 		return this.id;
 	}
-	public ArrayList<String>  getStatus () {
-		return this.status;
+	public ArrayList<OrderStatus>  getStatus () {
+		return this.orderStatus;
 	}
 	
 	public ArrayList<Product> getProducts() {

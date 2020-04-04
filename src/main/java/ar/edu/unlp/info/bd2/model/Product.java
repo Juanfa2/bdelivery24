@@ -1,5 +1,7 @@
 package ar.edu.unlp.info.bd2.model;
 import javax.persistence.*;
+
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
@@ -16,8 +18,11 @@ public class Product {
 	@Column(name="name")
 	private String name;
 	
-	@Column(name="price")
-	private Float price;
+	@Column(name="prices")
+	private ArrayList<Price> prices = new ArrayList<Price>();
+	
+	@Column(name="price_actual")
+	private Float price ;
 	
 	@Column(name="weight")
 	private Float weight; 
@@ -30,7 +35,9 @@ public class Product {
 	
 	public Product (String name, Float price, Float weight, Supplier supplier) {
 		this.setName(name);
-		this.setPrice(price);
+		Calendar cal = Calendar.getInstance();
+    	Date startDate = cal.getTime();
+		this.setPrice(price,startDate);
 		this.setWeight(weight);
 		this.setSupplier(supplier);
 	}
@@ -38,7 +45,9 @@ public class Product {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public void setPrice(Float price) {
+	public void setPrice(Float price, Date startDate) {
+		Price pr = new Price(price, startDate);
+		this.prices.add(pr);
 		this.price = price;
 	}
 	public void setWeight(Float weight) {
@@ -53,6 +62,10 @@ public class Product {
 	public Float getPrice() {
 		return this.price;
 	}
+	public ArrayList<Price> getPrices(){
+		return this.prices;
+	}
+	
 	public Float getWeight() {
 		return this.weight;
 	}
