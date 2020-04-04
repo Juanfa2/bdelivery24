@@ -42,7 +42,7 @@ public class Order {
 	private ArrayList<Product> products = new ArrayList<Product>();
 	
 	@Column(name="status")
-	private ArrayList<OrderStatus> orderStatus = new ArrayList<>();
+	private ArrayList<OrderStatus> orderStatus = new ArrayList<OrderStatus>();
 	
 	
 	public Order(Date dateOfOrder, String address, Float coordX, Float coordY, User client ) {

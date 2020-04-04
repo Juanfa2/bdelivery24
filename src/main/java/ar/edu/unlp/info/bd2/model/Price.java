@@ -8,6 +8,8 @@ import ar.edu.unlp.info.bd2.config.AppConfig;
 import ar.edu.unlp.info.bd2.config.HibernateConfiguration;
 
 public class Price {
+	
+	private Long id;
 	private Float price;
 	private Date startDate;
 	
@@ -29,6 +31,10 @@ public class Price {
 	
 	public Date getStartDate() {
 		return this.startDate;
+	}
+	
+	public Long getId() {
+		return this.id;
 	}
 	
 }

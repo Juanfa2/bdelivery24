@@ -9,6 +9,7 @@ import ar.edu.unlp.info.bd2.config.HibernateConfiguration;
 
 
 public class OrderStatus {
+	private Long id;
 	private String status;
 	
 	public OrderStatus(String status) {
@@ -21,5 +22,9 @@ public class OrderStatus {
 	
 	public String getStatus(){
 		return this.status;
+	}
+	
+	public Long getId() {
+		return this.id;
 	}
 }
