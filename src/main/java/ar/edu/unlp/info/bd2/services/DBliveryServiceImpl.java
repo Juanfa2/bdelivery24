@@ -49,8 +49,8 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public Optional<User> getUserByEmail(String email) {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<User> u = repository.getUserByEmail(email);
+		return u;
 	}
 
 	@Override
