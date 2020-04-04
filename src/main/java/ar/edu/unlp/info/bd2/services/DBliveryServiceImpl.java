@@ -43,7 +43,7 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public Optional<User> getUserById(Long id) {
-		User u = repository.getUserById(id);
+		Optional<User> u = repository.getUserById(id);
 		return u;
 	}
 

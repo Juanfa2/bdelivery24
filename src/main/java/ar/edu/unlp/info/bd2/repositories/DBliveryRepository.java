@@ -1,5 +1,7 @@
 package ar.edu.unlp.info.bd2.repositories;
 
+import java.util.Optional;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +16,8 @@ public class DBliveryRepository{
 
     private Session session = sessionFactory.openSession();
 
-    public User getUserById(long id) {
-    	User u=(User)session.get(User.class,id);
+    public Optional<User> getUserById(long id) {
+    	Optional<User> u=Optional.ofNullable(session.get(User.class,id));
     	return u;
     	
     }
