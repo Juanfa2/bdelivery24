@@ -18,8 +18,8 @@ public class Product {
 	@Column(name="name")
 	private String name;
 	
-	@Column(name="prices")
-	private ArrayList<Price> prices = new ArrayList<Price>();
+	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+	private ArrayList<Price> prices = new ArrayList<>();
 	
 	@Column(name="price_actual")
 	private Float price ;
@@ -31,8 +31,12 @@ public class Product {
 	@JoinColumn(name = "supplier_id")
 	private Supplier supplier;
 	
+	@ManyToMany(mappedBy = "products")
+	private ArrayList<Order> orders = new ArrayList<>();
 	
 	
+	
+
 	public Product (String name, Float price, Float weight, Supplier supplier) {
 		this.setName(name);
 		Calendar cal = Calendar.getInstance();
@@ -74,5 +78,12 @@ public class Product {
 	}
 	public Long getId(){
 		return this.getId();
+	}
+	public ArrayList<Order> getOrders() {
+		return orders;
+	}
+
+	public void setOrders(ArrayList<Order> orders) {
+		this.orders = orders;
 	}
 }

@@ -24,7 +24,7 @@ public class Order {
 	private Float coordY;
 	
 	
-	@OneToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="client_id")
 	private User client;
 	
@@ -32,17 +32,24 @@ public class Order {
 	@GeneratedValue
 	private Long id;
 	
-	
+	@Column(name= "cantidad")
 	private Long quantity;
 	
-	@OneToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="delivery_id")
 	private User deliveryUser;
 	
-	private ArrayList<Product> products = new ArrayList<Product>();
+	@ManyToMany
+	@JoinTable(
+			name = "order_product",
+			joinColumns = @JoinColumn(name = "id"),
+			inverseJoinColumns = @JoinColumn(name = "id")
+			)
+	private ArrayList<Product> products = new ArrayList<>();
 	
+	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
 	@Column(name="status")
-	private ArrayList<OrderStatus> orderStatus = new ArrayList<OrderStatus>();
+	private ArrayList<OrderStatus> orderStatus = new ArrayList<>();
 	
 	
 	public Order(Date dateOfOrder, String address, Float coordX, Float coordY, User client ) {
