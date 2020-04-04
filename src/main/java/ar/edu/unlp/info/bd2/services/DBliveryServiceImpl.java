@@ -19,26 +19,20 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public Product createProduct(String name, Float price, Float weight, Supplier supplier) {
-		// TODO Auto-generated method stub
-		return null;
+		Product p = new Product(name, price, weight, supplier);
+		return p;
 	}
 
 	@Override
 	public Supplier createSupplier(String name, String cuil, String address, Float coordX, Float coordY) {
-		// TODO Auto-generated method stub
 		Supplier s = new Supplier(name,cuil,address,coordX,coordY);
-	/*	s.setName(name);
-		s.setCuil(cuil);
-		s.setAddress(address);
-		s.setCoordX(coordX);
-		s.setCoordY(coordY);*/
 		return s;
 	}
 
 	@Override
 	public User createUser(String email, String password, String username, String name, Date dateOfBirth) {
-		// TODO Auto-generated method stub
-		return null;
+        User u = new User(email, password,username,name,dateOfBirth);
+		return u;
 	}
 
 	@Override
@@ -49,8 +43,8 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public Optional<User> getUserById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		User u = repository.getUserById(id);
+		return u;
 	}
 
 	@Override
@@ -79,7 +73,7 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public Order createOrder(Date dateOfOrder, String address, Float coordX, Float coordY, User client) {
-		// TODO Auto-generated method stub
+		Order o = new Order(dateOfOrder, address, coordX, coordY, client);
 		return null;
 	}
 
