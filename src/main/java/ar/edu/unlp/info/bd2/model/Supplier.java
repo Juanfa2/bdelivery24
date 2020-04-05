@@ -29,6 +29,9 @@ public class Supplier {
 	@Column(name="coordY")
 	private Float coordY;
 
+	public Supplier() {
+		
+	}
 	
 	public Supplier(String name, String cuil, String address, Float coordX, Float coordY) {
 		this.setName(name);
