@@ -55,20 +55,20 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public Optional<User> getUserByUsername(String username) {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<User> u = repository.getUserByUsername(username);
+		return u;
 	}
 
 	@Override
 	public Optional<Product> getProductById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<Product> p = repository.getUserByProduct(id);
+		return p;
 	}
 
 	@Override
 	public Optional<Order> getOrderById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<Order> o = repository.getUserByOrder(id);
+		return o;
 	}
 
 	@Override
@@ -127,8 +127,8 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public List<Product> getProductByName(String name) {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<Product> p = repository.getUserByName(name);
+		return p;
 	}
 	
 	

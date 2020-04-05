@@ -25,15 +25,10 @@ public class DBliveryRepository{
     }
 
 	public Optional<User> getUserByEmail(String email) {
-		//Query query = session.createQuery("from User where email = :email ");
-		//query.setParameter("email", email);
-		//Optional<User> u=Optional.ofNullable(session.get(User.class,id));
-		//return null;
-		
-        @SuppressWarnings("rawtypes")
-		Query query = session.createQuery("from User where email = :email ");
+	
+		@SuppressWarnings("unchecked")
+		Query<User> query = session.createQuery("from User where email = :email ");
         query.setParameter("email", email);
-        @SuppressWarnings("unchecked")
 		List<User> users = query.getResultList();
         Optional<User> u=Optional.ofNullable(users.get(0));
         return (users != null && !users.isEmpty()) ? u : null;
