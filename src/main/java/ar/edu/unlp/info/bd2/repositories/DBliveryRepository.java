@@ -109,8 +109,8 @@ public class DBliveryRepository{
         Session session = sessionFactory.openSession();
 
 		@SuppressWarnings("unchecked")
-		Query<Product> query = session.createQuery("from Product where name = :name ");
-        query.setParameter("name", name);
+		Query<Product> query = session.createQuery("from Product where name like :name ");
+        query.setParameter("name", "%" + name + "%");
 		List<Product> products = query.getResultList();
         //Optional<Product> u=Optional.ofNullable(products.get(0));
 		session.close();
