@@ -1,8 +1,6 @@
 package ar.edu.unlp.info.bd2.model;
 import javax.persistence.*;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Optional;
+
 import java.util.*;
 import ar.edu.unlp.info.bd2.config.AppConfig;
 import ar.edu.unlp.info.bd2.config.HibernateConfiguration;
@@ -32,26 +30,22 @@ public class Order {
 	@GeneratedValue
 	private Long id;
 	
-	@Column(name= "cantidad")
-	private Long quantity;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name="delivery_id")
 	private User deliveryUser;
 	
-	@ManyToMany
-	@JoinTable(
-			name = "order_product",
-			joinColumns = @JoinColumn(name = "id_o"),
-			inverseJoinColumns = @JoinColumn(name = "id_p")
-			)
-	private List<Product> products = new ArrayList<>();
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "order", cascade = CascadeType.ALL)
+	private List<OrderProduct> orderProduct = new ArrayList<>();
 	
-	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+
+	@OneToMany(fetch = FetchType.EAGER ,mappedBy = "order", cascade = CascadeType.ALL)
 	@Column(name="status")
 	private List<OrderStatus> orderStatus = new ArrayList<>();
 	
-	
+	public Order() {
+		
+	}
 	public Order(Date dateOfOrder, String address, Float coordX, Float coordY, User client ) {
 		this.setdateOfOrder(dateOfOrder);
 		this.setAddress(address);
@@ -82,13 +76,20 @@ public class Order {
 		this.client = client;
 	}
 	
-	public void setProducts(Product product) {
-		this.products.add(product);
+	
+	
+	public void setDateOfOrder(Date dateOfOrder) {
+		this.dateOfOrder = dateOfOrder;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	
+	public void setOrderStatus(List<OrderStatus> orderStatus) {
+		this.orderStatus = orderStatus;
 	}
 	
-	public void sumCuantity(Long cuantity) {
-		this.quantity += quantity;
-	}
 	public void setDeliveryUser(User deliveryUser) {
 		this.deliveryUser = deliveryUser;
 	}
@@ -119,14 +120,16 @@ public class Order {
 		return this.orderStatus;
 	}
 	
-	public List<Product> getProducts() {
-		return this.products;
-	}
-	
 	public User getDeliveryUser() {
 		return this.deliveryUser;
 	}
 	
+
+	public List<OrderStatus> getProducts() {
+		return orderStatus;
+	}
+	
+
 	
 
 }

@@ -21,8 +21,11 @@ public class Product {
 	@Column(name="name")
 	private String name;
 	
-	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.EAGER,mappedBy = "product", cascade = CascadeType.ALL)
 	private List<Price> prices = new ArrayList<>();
+	
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "product", cascade = CascadeType.ALL)
+	private List<OrderProduct> orderProduct = new ArrayList<>();
 	
 	@Column(name="price_actual")
 	private Float price ;
@@ -30,12 +33,12 @@ public class Product {
 	@Column(name="weight")
 	private Float weight; 
 	
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "supplier_id")
 	private Supplier supplier;
 	
-	@ManyToMany(mappedBy = "products")
-	private List<Order> orders = new ArrayList<Order>();
+	
 	
 	
 	public Product() {
@@ -85,11 +88,11 @@ public class Product {
 	public Long getId(){
 		return this.id;
 	}
-	public List<Order> getOrders() {
-		return orders;
+	public List<OrderProduct> getOrderProduct() {
+		return orderProduct;
 	}
 
-	public void setOrders(ArrayList<Order> orders) {
-		this.orders = orders;
+	public void setOrderProduct(List<OrderProduct> orderProduct) {
+		this.orderProduct = orderProduct;
 	}
 }

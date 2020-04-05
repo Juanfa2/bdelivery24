@@ -11,6 +11,7 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import ar.edu.unlp.info.bd2.model.Order;
+import ar.edu.unlp.info.bd2.model.OrderProduct;
 import ar.edu.unlp.info.bd2.model.Product;
 import ar.edu.unlp.info.bd2.model.Supplier;
 import ar.edu.unlp.info.bd2.model.User;
@@ -43,12 +44,30 @@ public class DBliveryRepository{
 	}
 
 	public Order createOrder(Date dateOfOrder, String address, Float coordX, Float coordY, User client) {
-        Session session = sessionFactory.openSession();
+		Session session = sessionFactory.openSession();
+        Transaction tx = null;
+        Order p;
+        
+        try {
+            tx = session.beginTransaction();
+            
+            p = new Order(dateOfOrder, address, coordX, coordY, client);
+            session.save(p);
+            
+            tx.commit();
+        }
+        catch (Exception e) {
+            if (tx!=null) tx.rollback();
+            throw e;
+        }
+        finally {
+            session.close();
+        }
 
-		Order o = new Order(dateOfOrder, address, coordX, coordY, client);
-		session.persist(o);
-		session.close();
-		return o;
+		
+		//session.persist(p);
+		//session.close();
+		return p;
 	}
 
 	public Product createProduct(String name, Float price, Float weight, Supplier supplier) {
@@ -166,7 +185,7 @@ public class DBliveryRepository{
 
 		@SuppressWarnings("unchecked")
 
-		Query<Product> query = session.createQuery("FROM Product WHERE name LIKE :name", Product.class);// where name like concat('%', :name, '%')");
+		Query<Product> query = session.createQuery("FROM Product WHERE name LIKE :name", Product.class);
         query.setParameter("name", "%" + name + "%");
 		products = query.getResultList();
 
@@ -174,9 +193,14 @@ public class DBliveryRepository{
         return products;
 	}
 
-	public Order addProductToOrder(Long order, Long quantity, Product product) {
-		//Order o = this.getOrderById(order);
+	public Optional <Order> addProductToOrder(Long order, Long quantity, Product product) {
+		/*
+		Optional <Order> o = this.getOrderById(order);
+		Order or = o.get();
+		OrderProduct op = new OrderProduct(or, quantity, product);
 		
+		return o;
+		*/
 		return null;
 	}
 

@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import ar.edu.unlp.info.bd2.model.Order;
 import ar.edu.unlp.info.bd2.model.OrderStatus;
 import ar.edu.unlp.info.bd2.model.Product;
@@ -79,15 +81,22 @@ public class DBliveryServiceImpl implements DBliveryService {
 	}
 
 	@Override
+	@Transactional
 	public Order createOrder(Date dateOfOrder, String address, Float coordX, Float coordY, User client) {
 		Order o = repository.createOrder(dateOfOrder, address, coordX, coordY, client);
 		return o;
 	}
 
 	@Override
+	@Transactional
 	public Order addProduct(Long order, Long quantity, Product product) throws DBliveryException {
-		Order o = repository.addProductToOrder(order, quantity, product);
-		return o;
+		/*
+		
+		Optional<Order> o = repository.addProductToOrder(order, quantity, product);
+		Order or = o.get();
+		return or;
+		*/
+		return null;
 	}
 
 	@Override
