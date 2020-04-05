@@ -81,7 +81,7 @@ public class Product {
 		return this.supplier;
 	}
 	public Long getId(){
-		return this.getId();
+		return this.id;
 	}
 	public List<Order> getOrders() {
 		return orders;
