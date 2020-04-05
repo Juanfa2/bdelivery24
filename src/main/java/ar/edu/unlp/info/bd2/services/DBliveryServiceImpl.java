@@ -20,19 +20,19 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public Product createProduct(String name, Float price, Float weight, Supplier supplier) {
-		Product p = new Product(name, price, weight, supplier);
+		Product p = repository.createProduct(name, price, weight, supplier);
 		return p;
 	}
 
 	@Override
 	public Supplier createSupplier(String name, String cuil, String address, Float coordX, Float coordY) {
-		Supplier s = new Supplier(name,cuil,address,coordX,coordY);
+		Supplier s = repository.createSupplier(name,cuil,address,coordX,coordY);
 		return s;
 	}
 
 	@Override
 	public User createUser(String email, String password, String username, String name, Date dateOfBirth) {
-        User u = new User(email, password,username,name,dateOfBirth);
+        User u = repository.createUser(email, password,username,name,dateOfBirth);
 		return u;
 	}
 
@@ -50,32 +50,32 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public Optional<User> getUserByEmail(String email) {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<User> u = repository.getUserByEmail(email);
+		return u;
 	}
 
 	@Override
 	public Optional<User> getUserByUsername(String username) {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<User> u = repository.getUserByUsername(username);
+		return u;
 	}
 
 	@Override
 	public Optional<Product> getProductById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<Product> p = repository.getProductById(id);
+		return p;
 	}
 
 	@Override
 	public Optional<Order> getOrderById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<Order> o = repository.getOrderById(id);
+		return o;
 	}
 
 	@Override
 	public Order createOrder(Date dateOfOrder, String address, Float coordX, Float coordY, User client) {
-		Order o = new Order(dateOfOrder, address, coordX, coordY, client);
-		return null;
+		Order o = repository.createOrder(dateOfOrder, address, coordX, coordY, client);
+		return o;
 	}
 
 	@Override
@@ -128,8 +128,8 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public List<Product> getProductByName(String name) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Product> p = repository.getProductByName(name);
+		return p;
 	}
 	
 	
