@@ -1,9 +1,12 @@
 package ar.edu.unlp.info.bd2.model;
 import javax.persistence.*;
 
+
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import ar.edu.unlp.info.bd2.config.AppConfig;
 import ar.edu.unlp.info.bd2.config.HibernateConfiguration;
@@ -19,7 +22,7 @@ public class Product {
 	private String name;
 	
 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-	private ArrayList<Price> prices = new ArrayList<>();
+	private List<Price> prices = new ArrayList<>();
 	
 	@Column(name="price_actual")
 	private Float price ;
@@ -32,7 +35,7 @@ public class Product {
 	private Supplier supplier;
 	
 	@ManyToMany(mappedBy = "products")
-	private ArrayList<Order> orders = new ArrayList<>();
+	private List<Order> orders = new ArrayList<Order>();
 	
 	
 	
@@ -54,6 +57,7 @@ public class Product {
 		this.prices.add(pr);
 		this.price = price;
 	}
+	
 	public void setWeight(Float weight) {
 		this.weight = weight;
 	}
@@ -66,7 +70,7 @@ public class Product {
 	public Float getPrice() {
 		return this.price;
 	}
-	public ArrayList<Price> getPrices(){
+	public List<Price> getPrices(){
 		return this.prices;
 	}
 	
@@ -77,9 +81,9 @@ public class Product {
 		return this.supplier;
 	}
 	public Long getId(){
-		return this.getId();
+		return this.id;
 	}
-	public ArrayList<Order> getOrders() {
+	public List<Order> getOrders() {
 		return orders;
 	}
 

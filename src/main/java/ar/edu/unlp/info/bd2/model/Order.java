@@ -8,7 +8,7 @@ import ar.edu.unlp.info.bd2.config.AppConfig;
 import ar.edu.unlp.info.bd2.config.HibernateConfiguration;
 
 @Entity
-@Table(name="productOrders")
+@Table(name="orders")
 public class Order {
 	
 	@Column(name="dateOfOrder")
@@ -42,14 +42,14 @@ public class Order {
 	@ManyToMany
 	@JoinTable(
 			name = "order_product",
-			joinColumns = @JoinColumn(name = "id"),
-			inverseJoinColumns = @JoinColumn(name = "id")
+			joinColumns = @JoinColumn(name = "id_o"),
+			inverseJoinColumns = @JoinColumn(name = "id_p")
 			)
-	private ArrayList<Product> products = new ArrayList<>();
+	private List<Product> products = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
 	@Column(name="status")
-	private ArrayList<OrderStatus> orderStatus = new ArrayList<>();
+	private List<OrderStatus> orderStatus = new ArrayList<>();
 	
 	
 	public Order(Date dateOfOrder, String address, Float coordX, Float coordY, User client ) {
@@ -115,11 +115,11 @@ public class Order {
 	public Long getId () {
 		return this.id;
 	}
-	public ArrayList<OrderStatus>  getStatus () {
+	public List<OrderStatus>  getStatus () {
 		return this.orderStatus;
 	}
 	
-	public ArrayList<Product> getProducts() {
+	public List<Product> getProducts() {
 		return this.products;
 	}
 	

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import ar.edu.unlp.info.bd2.model.Order;
+import ar.edu.unlp.info.bd2.model.OrderStatus;
 import ar.edu.unlp.info.bd2.model.Product;
 import ar.edu.unlp.info.bd2.model.Supplier;
 import ar.edu.unlp.info.bd2.model.User;
@@ -120,11 +121,12 @@ public class DBliveryServiceImpl implements DBliveryService {
 		return false;
 	}
 
-	@Override
+	/*@Override
 	public OrderStatus getActualStatus(Long order) {
 		// TODO Auto-generated method stub
-		return null;
-	}
+		OrderStatus o = null; //= new OrderStatus();
+		return o;
+	}*/
 
 	@Override
 	public List<Product> getProductByName(String name) {
