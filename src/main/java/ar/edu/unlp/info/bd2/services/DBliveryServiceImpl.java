@@ -10,6 +10,7 @@ import ar.edu.unlp.info.bd2.model.Product;
 import ar.edu.unlp.info.bd2.model.Supplier;
 import ar.edu.unlp.info.bd2.model.User;
 import ar.edu.unlp.info.bd2.model.OrderStatus;
+import ar.edu.unlp.info.bd2.model.Price;
 import ar.edu.unlp.info.bd2.repositories.DBliveryException;
 import ar.edu.unlp.info.bd2.repositories.DBliveryRepository;
 
@@ -40,6 +41,10 @@ public class DBliveryServiceImpl implements DBliveryService {
 	@Override
 	public Product updateProductPrice(Long id, Float price, Date startDate) throws DBliveryException {
 		// TODO Auto-generated method stub
+		
+		Optional<Product> p = this.repository.getProductById(id);
+		Price pr = new Price(price, startDate);
+		
 		return null;
 	}
 
