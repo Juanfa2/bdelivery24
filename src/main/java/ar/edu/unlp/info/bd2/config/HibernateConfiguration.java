@@ -29,7 +29,7 @@ public class HibernateConfiguration {
 
     @Bean
     public DataSource dataSource() {
-        BasicDataSource dataSource = new BasicDataSource();
+        BasicDataSource dataSource = new BasicDataSource();  
         dataSource.setDriverClassName("com.mysql.jdbc.Driver");
         dataSource.setUrl("jdbc:mysql://127.0.0.1:3306/bd2_grupo" + this.getGroupNumber());
         dataSource.setUsername("grupo24");

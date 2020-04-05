@@ -38,7 +38,9 @@ public class Product {
 	private List<Order> orders = new ArrayList<Order>();
 	
 	
-	
+	public Product() {
+		
+	}
 
 	public Product (String name, Float price, Float weight, Supplier supplier) {
 		this.setName(name);

@@ -30,6 +30,10 @@ public class User {
 	@Column(name="dateOfBirth")
 	private Date dateOfBirth;
 	
+	public User() {
+		
+	}
+	
 	public User (String email, String password, String username, String name, Date dateOfBirth) {
 		this.setEmail(email);
 		this.setPassword(password);

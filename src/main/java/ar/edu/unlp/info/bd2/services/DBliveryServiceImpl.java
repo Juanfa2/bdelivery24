@@ -86,8 +86,8 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public Order addProduct(Long order, Long quantity, Product product) throws DBliveryException {
-		// TODO Auto-generated method stub
-		return null;
+		Order o = repository.addProductToOrder(order, quantity, product);
+		return o;
 	}
 
 	@Override
