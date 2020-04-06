@@ -5,7 +5,7 @@ sudo service mysql stop
 docker -v
 if [ $? -ne 0 ]; then
    sudo apt update
-   sudo apt install docker
+   sudo apt install docker.io
    sudo usermod -aG docker $USER
    newgrp docker
 fi
