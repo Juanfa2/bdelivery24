@@ -21,21 +21,19 @@ public class Price {
 	@Column(name="startDate")
 	private Date startDate;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name="product_id")
-	private Product product;
+	private Product products;
 	
-	public Product getProduct() {
-		return product;
+	
+	public Price() {
+		
 	}
 
-	public void setProduct(Product product) {
-		this.product = product;
-	}
-
-	public Price (Float price, Date startDate) {
+	public Price (Product product, Float price, Date startDate) {
 		this.setPrice(price);
 		this.setStartDate(startDate);
+		this.setProduct(product);
 	}
 	
 	public void setPrice(Float price) {
@@ -55,6 +53,13 @@ public class Price {
 	
 	public Long getId() {
 		return this.id;
+	}
+	public Product getProduct() {
+		return products;
+	}
+
+	public void setProduct(Product product) {
+		this.products = product;
 	}
 	
 }

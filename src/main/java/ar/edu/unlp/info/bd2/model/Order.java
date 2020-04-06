@@ -22,7 +22,7 @@ public class Order {
 	private Float coordY;
 	
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name="client_id")
 	private User client;
 	
@@ -35,13 +35,13 @@ public class Order {
 	@JoinColumn(name="delivery_id")
 	private User deliveryUser;
 	
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "order", cascade = CascadeType.ALL)
+	@OneToMany( mappedBy = "orderP", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<OrderProduct> orderProduct = new ArrayList<>();
 	
 
-	@OneToMany(fetch = FetchType.EAGER ,mappedBy = "order", cascade = CascadeType.ALL)
-	@Column(name="status")
+	@OneToMany( mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<OrderStatus> orderStatus = new ArrayList<>();
+	
 	
 	public Order() {
 		
@@ -52,14 +52,15 @@ public class Order {
 		this.setCoordX(coordX);
 		this.setCoordY(coordY);
 		this.setClient(client);
-		this.setStatus("Pending");
 		
 	}
-	public void setStatus(String status) {
-		OrderStatus st = new OrderStatus(status);
-		this.orderStatus.add(st);
+
+	public List<OrderStatus> getOrderStatus() {
+		return orderStatus;
 	}
-	
+	public void setOrderStatus(List<OrderStatus> orderStatus) {
+		this.orderStatus = orderStatus;
+	}
 	public void setdateOfOrder(Date dateOfOrder) {
 		this.dateOfOrder = dateOfOrder;
 	}
@@ -86,9 +87,7 @@ public class Order {
 	}
 
 	
-	public void setOrderStatus(List<OrderStatus> orderStatus) {
-		this.orderStatus = orderStatus;
-	}
+	
 	
 	public void setDeliveryUser(User deliveryUser) {
 		this.deliveryUser = deliveryUser;
@@ -130,6 +129,11 @@ public class Order {
 	}
 	
 
-	
+	public List<OrderProduct> getOrderProduct() {
+		return orderProduct;
+	}
+	public void setOrderProduct(List<OrderProduct> orderProduct) {
+		this.orderProduct = orderProduct;
+	}
 
 }

@@ -1,5 +1,6 @@
 package ar.edu.unlp.info.bd2.repositories;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +16,8 @@ import ar.edu.unlp.info.bd2.model.OrderProduct;
 import ar.edu.unlp.info.bd2.model.Product;
 import ar.edu.unlp.info.bd2.model.Supplier;
 import ar.edu.unlp.info.bd2.model.User;
+import ar.edu.unlp.info.bd2.model.OrderStatus;
+import ar.edu.unlp.info.bd2.model.Price;
 
 
 public class DBliveryRepository{
@@ -47,12 +50,15 @@ public class DBliveryRepository{
 		Session session = sessionFactory.openSession();
         Transaction tx = null;
         Order p;
+        OrderStatus os;
         
         try {
             tx = session.beginTransaction();
             
             p = new Order(dateOfOrder, address, coordX, coordY, client);
+            os = new OrderStatus (p, "Pending");
             session.save(p);
+            session.save(os);
             
             tx.commit();
         }
@@ -74,12 +80,18 @@ public class DBliveryRepository{
         Session session = sessionFactory.openSession();
         Transaction tx = null;
         Product p;
+        Price pr;
+        Calendar cal = Calendar.getInstance();
+    	Date startDate = cal.getTime();
         
         try {
             tx = session.beginTransaction();
             
             p = new Product(name, price, weight, supplier);
+            pr = new Price(p, price, startDate);
+            
             session.save(p);
+            session.save(pr);
             
             tx.commit();
         }
@@ -194,14 +206,14 @@ public class DBliveryRepository{
 	}
 
 	public Optional <Order> addProductToOrder(Long order, Long quantity, Product product) {
-		/*
+		Session session = sessionFactory.openSession();
 		Optional <Order> o = this.getOrderById(order);
 		Order or = o.get();
 		OrderProduct op = new OrderProduct(or, quantity, product);
-		
+		session.save(op);
+		session.close();
 		return o;
-		*/
-		return null;
+		
 	}
 
 

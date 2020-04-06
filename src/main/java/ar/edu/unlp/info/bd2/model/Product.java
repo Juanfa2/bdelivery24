@@ -12,7 +12,7 @@ import ar.edu.unlp.info.bd2.config.AppConfig;
 import ar.edu.unlp.info.bd2.config.HibernateConfiguration;
 
 @Entity
-@Table(name="Products")
+@Table(name="products")
 public class Product {
 	@Id
 	@GeneratedValue
@@ -21,10 +21,12 @@ public class Product {
 	@Column(name="name")
 	private String name;
 	
-	@OneToMany(fetch = FetchType.EAGER,mappedBy = "product", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "products", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Price> prices = new ArrayList<>();
 	
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "product", cascade = CascadeType.ALL)
+	
+
+	@OneToMany(  mappedBy = "producto", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<OrderProduct> orderProduct = new ArrayList<>();
 	
 	@Column(name="price_actual")
@@ -34,7 +36,7 @@ public class Product {
 	private Float weight; 
 	
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "supplier_id")
 	private Supplier supplier;
 	
@@ -47,9 +49,7 @@ public class Product {
 
 	public Product (String name, Float price, Float weight, Supplier supplier) {
 		this.setName(name);
-		Calendar cal = Calendar.getInstance();
-    	Date startDate = cal.getTime();
-		this.setPrice(price,startDate);
+		this.setPrice(price);
 		this.setWeight(weight);
 		this.setSupplier(supplier);
 	}
@@ -57,9 +57,7 @@ public class Product {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public void setPrice(Float price, Date startDate) {
-		Price pr = new Price(price, startDate);
-		this.prices.add(pr);
+	public void setPrice(Float price) {
 		this.price = price;
 	}
 	
@@ -89,10 +87,13 @@ public class Product {
 		return this.id;
 	}
 	public List<OrderProduct> getOrderProduct() {
-		return orderProduct;
+		return this.orderProduct;
 	}
 
 	public void setOrderProduct(List<OrderProduct> orderProduct) {
 		this.orderProduct = orderProduct;
+	}
+	public void setPrices(List<Price> prices) {
+		this.prices = prices;
 	}
 }

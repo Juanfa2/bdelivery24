@@ -1,9 +1,16 @@
 package ar.edu.unlp.info.bd2.model;
 
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.*;
+
+
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import ar.edu.unlp.info.bd2.config.AppConfig;
+import ar.edu.unlp.info.bd2.config.HibernateConfiguration;
 
 @Entity
 @Table(name = "order_product")
@@ -18,17 +25,17 @@ public class OrderProduct {
 	
 	@ManyToOne
 	@JoinColumn(name="product_id")
-	private Product product;
+	private Product producto;
 	
 	@ManyToOne
 	@JoinColumn(name="order_id")
-	private Order order;
+	private Order orderP;
 	
 	public OrderProduct() {
 		
 	}
 	
-	public OrderProduct(Order order, Long quantity, Product product) {
+	public OrderProduct(Order order, Long cuantity, Product product) {
 		this.setOrder(order);
 		this.setCuantity(cuantity);
 		this.setProduct(product);
@@ -51,19 +58,19 @@ public class OrderProduct {
 	}
 
 	public Product getProduct() {
-		return product;
+		return producto;
 	}
 
 	public void setProduct(Product product) {
-		this.product = product;
+		this.producto = product;
 	}
 
 	public Order getOrder() {
-		return order;
+		return orderP;
 	}
 
 	public void setOrder(Order order) {
-		this.order = order;
+		this.orderP = order;
 	}
 	
 	

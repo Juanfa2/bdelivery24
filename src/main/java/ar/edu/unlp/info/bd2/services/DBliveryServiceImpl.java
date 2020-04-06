@@ -41,13 +41,16 @@ public class DBliveryServiceImpl implements DBliveryService {
 	}
 
 	@Override
+	@Transactional
 	public Product updateProductPrice(Long id, Float price, Date startDate) throws DBliveryException {
 		// TODO Auto-generated method stub
 		
 		Optional<Product> p = this.repository.getProductById(id);
-		Price pr = new Price(price, startDate);
+		Product pr = p.get();
+		pr.setPrice(price);
+		Price pc = new Price(pr,price, startDate);
 		
-		return null;
+		return pr;
 	}
 
 	@Override
@@ -90,13 +93,11 @@ public class DBliveryServiceImpl implements DBliveryService {
 	@Override
 	@Transactional
 	public Order addProduct(Long order, Long quantity, Product product) throws DBliveryException {
-		/*
+		
 		
 		Optional<Order> o = repository.addProductToOrder(order, quantity, product);
 		Order or = o.get();
 		return or;
-		*/
-		return null;
 	}
 
 	@Override

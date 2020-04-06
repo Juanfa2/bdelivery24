@@ -18,9 +18,18 @@ public class OrderStatus {
 	@Column(name = "status")
 	private String status;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name= "order_id")
 	private Order order;
+	
+	public OrderStatus() {
+		
+	}
+	
+	public OrderStatus(Order order, String status) {
+		this.setOrder(order);
+		this.setStatus(status);
+	}
 	
 	public Order getOrder() {
 		return order;
