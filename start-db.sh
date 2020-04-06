@@ -1,7 +1,5 @@
 #!/bin/bash
 
-sudo service mysql stop
-
 docker -v
 if [ $? -ne 0 ]; then
    sudo apt update
@@ -20,7 +18,7 @@ if [ ! "$(docker ps -q -f name=mysql)" ]; then
     
     echo "Iniciando nuevo contenedor mysql"
     docker run --name mysql                 \
-            -p 3306:3306                    \
+            -p 33306:3306                    \
             -e MYSQL_ROOT_PASSWORD=Rahziec2 \
             -e MYSQL_DATABASE=bd2_grupo24   \
             -e MYSQL_USER=grupo24           \
