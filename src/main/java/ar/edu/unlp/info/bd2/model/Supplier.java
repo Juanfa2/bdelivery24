@@ -1,7 +1,10 @@
 package ar.edu.unlp.info.bd2.model;
 import javax.persistence.*;
+
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import ar.edu.unlp.info.bd2.config.AppConfig;
 import ar.edu.unlp.info.bd2.config.HibernateConfiguration;
@@ -28,9 +31,11 @@ public class Supplier {
 	
 	@Column(name="coordY")
 	private Float coordY;
+	
+	@OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<Product> products = new ArrayList<>();
 
-	public Supplier() {
-		
+	public Supplier() {		
 	}
 	
 	public Supplier(String name, String cuil, String address, Float coordX, Float coordY) {

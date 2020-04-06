@@ -207,12 +207,31 @@ public class DBliveryRepository{
 
 	public Optional <Order> addProductToOrder(Long order, Long quantity, Product product) {
 		Session session = sessionFactory.openSession();
+        Transaction tx = null;
+        OrderProduct op;
+        
 		Optional <Order> o = this.getOrderById(order);
 		Order or = o.get();
-		OrderProduct op = new OrderProduct(or, quantity, product);
-		session.save(op);
-		session.close();
-		return o;
+		
+        
+        try {
+            tx = session.beginTransaction();
+            
+            op = new OrderProduct(or, quantity, product);
+    		session.save(op);
+            
+            tx.commit();
+        }
+        catch (Exception e) {
+            if (tx!=null) tx.rollback();
+            throw e;
+        }
+        finally {
+            session.close();
+        }
+        return o;
+		
+		
 		
 	}
 

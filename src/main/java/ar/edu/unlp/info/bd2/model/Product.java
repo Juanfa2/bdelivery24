@@ -1,8 +1,5 @@
 package ar.edu.unlp.info.bd2.model;
 import javax.persistence.*;
-
-
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -36,8 +33,8 @@ public class Product {
 	private Float weight; 
 	
 	
-	@ManyToOne
-	@JoinColumn(name = "supplier_id")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "supplier")
 	private Supplier supplier;
 	
 	
