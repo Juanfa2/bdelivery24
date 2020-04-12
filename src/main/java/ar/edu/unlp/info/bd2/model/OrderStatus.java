@@ -12,7 +12,7 @@ import ar.edu.unlp.info.bd2.config.HibernateConfiguration;
 public class OrderStatus {
 	
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	@Column(name = "status")

@@ -27,7 +27,7 @@ public class Order {
 	private User client;
 	
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	
