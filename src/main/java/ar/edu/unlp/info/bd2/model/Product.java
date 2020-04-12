@@ -45,10 +45,14 @@ public class Product {
 	}
 
 	public Product (String name, Float price, Float weight, Supplier supplier) {
+		Calendar cal = Calendar.getInstance();
+		Date startDate = cal.getTime();
+
 		this.setName(name);
 		this.setPrice(price);
 		this.setWeight(weight);
 		this.setSupplier(supplier);
+		this.prices.add(new Price(this,price,startDate));
 	}
 
 	public void setName(String name) {
@@ -90,7 +94,8 @@ public class Product {
 	public void setOrderProduct(List<OrderProduct> orderProduct) {
 		this.orderProduct = orderProduct;
 	}
-	public void setPrices(List<Price> prices) {
-		this.prices = prices;
+	public void updatePrice(Price price) {
+		this.setPrice(price.getPrice());
+		this.prices.add(price);
 	}
 }

@@ -52,14 +52,15 @@ public class Order {
 		this.setCoordX(coordX);
 		this.setCoordY(coordY);
 		this.setClient(client);
+		this.setOrderStatus(new OrderStatus(this, "Pending"));
 		
 	}
 
 	public List<OrderStatus> getOrderStatus() {
 		return orderStatus;
 	}
-	public void setOrderStatus(List<OrderStatus> orderStatus) {
-		this.orderStatus = orderStatus;
+	public void setOrderStatus(OrderStatus orderStatus) {
+		this.orderStatus.add(orderStatus);
 	}
 	public void setdateOfOrder(Date dateOfOrder) {
 		this.dateOfOrder = dateOfOrder;
@@ -124,8 +125,8 @@ public class Order {
 	}
 	
 
-	public List<OrderStatus> getProducts() {
-		return orderStatus;
+	public List<OrderProduct> getProducts() {
+		return orderProduct;
 	}
 	
 
@@ -134,6 +135,11 @@ public class Order {
 	}
 	public void setOrderProduct(List<OrderProduct> orderProduct) {
 		this.orderProduct = orderProduct;
+	}
+
+	public void addOrderProduct(OrderProduct orderProduct) {
+		this.orderProduct.add(orderProduct);
+
 	}
 
 }

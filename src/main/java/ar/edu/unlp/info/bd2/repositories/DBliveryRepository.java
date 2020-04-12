@@ -27,214 +27,96 @@ public class DBliveryRepository{
 
 
     public Optional<User> getUserById(long id) {
-        Session session = sessionFactory.openSession();
-    	Optional<User> u=Optional.ofNullable(session.get(User.class,id));
-    	session.close();
+
+        String queryStr = "FROM User WHERE id = :id";
+        Query<User> query=this.sessionFactory.getCurrentSession().createQuery(queryStr);
+        query.setParameter("id", id);
+        Optional<User> u= query.uniqueResultOptional();
+
     	return u;
     }
 
 	public Optional<User> getUserByEmail(String email) {
-        Session session = sessionFactory.openSession();
 
-		@SuppressWarnings("unchecked")
-		Query<User> query = session.createQuery("from User where email = :email ");
+        String queryStr = "from User where email = :email";
+        Query<User> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
         query.setParameter("email", email);
-		List<User> users = query.getResultList();
-        Optional<User> u=Optional.ofNullable(users.get(0));
-        session.close();
-        return (users != null && !users.isEmpty()) ? u : null;
-		
-	}
+        Optional<User> u=query.uniqueResultOptional();
+        return u;
+    }
 
-	public Order createOrder(Date dateOfOrder, String address, Float coordX, Float coordY, User client) {
-		Session session = sessionFactory.openSession();
-        Transaction tx = null;
-        Order p;
-        OrderStatus os;
-        
-        try {
-            tx = session.beginTransaction();
-            
-            p = new Order(dateOfOrder, address, coordX, coordY, client);
-            os = new OrderStatus (p, "Pending");
-            session.save(p);
-            session.save(os);
-            
-            tx.commit();
-        }
-        catch (Exception e) {
-            if (tx!=null) tx.rollback();
-            throw e;
-        }
-        finally {
-            session.close();
-        }
+	public Optional<User> getUserByUsername(String username) {
 
-		
-		//session.persist(p);
-		//session.close();
-		return p;
-	}
+        String queryStr = "from User where username = :username";
+        Query<User> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
+        query.setParameter("username", username);
+        Optional<User>  u = query.uniqueResultOptional();
 
-	public Product createProduct(String name, Float price, Float weight, Supplier supplier) {
-        Session session = sessionFactory.openSession();
-        Transaction tx = null;
-        Product p;
-        Price pr;
-        Calendar cal = Calendar.getInstance();
-    	Date startDate = cal.getTime();
-        
-        try {
-            tx = session.beginTransaction();
-            
-            p = new Product(name, price, weight, supplier);
-            pr = new Price(p, price, startDate);
-            
-            session.save(p);
-            session.save(pr);
-            
-            tx.commit();
-        }
-        catch (Exception e) {
-            if (tx!=null) tx.rollback();
-            throw e;
-        }
-        finally {
-            session.close();
-        }
-
-		
-		//session.persist(p);
-		//session.close();
-		return p;
-	}
-
-	public Supplier createSupplier(String name, String cuil, String address, Float coordX, Float coordY) {
-        Session session = sessionFactory.openSession();
-        Transaction tx = null;
-        Supplier s;
-        
-        try {
-            tx = session.beginTransaction();
-            
-            s = new Supplier(name,cuil,address,coordX,coordY);
-            session.save(s);
-            
-            tx.commit();
-        }
-        catch (Exception e) {
-            if (tx!=null) tx.rollback();
-            throw e;
-        }
-        finally {
-            session.close();
-        }
-        
-        
-        return s;
-	}
-
-	public User createUser(String email, String password, String username, String name, Date dateOfBirth) {
-        Session session = sessionFactory.openSession();
-        Transaction tx = null;
-        User u;
-		
-        
-        try {
-            tx = session.beginTransaction();
-            
-            u = new User(email, password,username,name,dateOfBirth);
-            session.save(u);
-            
-            tx.commit();
-        }
-        catch (Exception e) {
-            if (tx!=null) tx.rollback();
-            throw e;
-        }
-        finally {
-            session.close();
-        }
         return u;
 	}
 
-	public Optional<User> getUserByUsername(String username) {
-        Session session = sessionFactory.openSession();
-        //Optional<User> u;
-		@SuppressWarnings("unchecked")
-		Query<User> query = session.createQuery("from User where username = :username ");
-        query.setParameter("username", username);
-		List<User> users = query.getResultList();
-		
-        Optional<User> u=Optional.of(users.get(0));
-        //if (!users.isEmpty()) {
-        //	u=Optional.ofNullable(users.get(0));
-        //}
-        //Optional<User> u=users.isEmpty() ? null : Optional.ofNullable(users.get(0));
-        session.close();
-        return u; //(users != null && !users.isEmpty()) ? u : null;
-	}
-
 	public Optional<Product> getProductById(Long id) {
-        Session session = sessionFactory.openSession();
 
-		Optional<Product> p=Optional.ofNullable(session.get(Product.class,id));
-		session.close();
-		return p;
-	}
+        String queryStr = "FROM Product WHERE id Like :id";
+        Query<Product> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
+        query.setParameter("id", id);
+        Optional<Product> p = query.uniqueResultOptional();
+
+        return p;
+    }
 
 	public Optional<Order> getOrderById(Long id) {
-        Session session = sessionFactory.openSession();
 
-		Optional<Order> o=Optional.ofNullable(session.get(Order.class,id));
-		session.close();
+        String queryStr = "FROM Order WHERE id Like :id";
+        Query<Order> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
+        query.setParameter("id", id);
+        Optional<Order> o = query.uniqueResultOptional();
+
 		return o;
 	}
 
 	public List<Product> getProductByName(String name) {
-        Session session = sessionFactory.openSession();
-        List<Product> products = null;
 
-		@SuppressWarnings("unchecked")
-
-		Query<Product> query = session.createQuery("FROM Product WHERE name LIKE :name", Product.class);
+        String queryStr = "FROM Product WHERE name LIKE :name";
+        Query<Product> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
         query.setParameter("name", "%" + name + "%");
-		products = query.getResultList();
+        List<Product> products = query.getResultList();
 
-		session.close();
         return products;
 	}
 
-	public Optional <Order> addProductToOrder(Long order, Long quantity, Product product) {
-		Session session = sessionFactory.openSession();
-        Transaction tx = null;
-        OrderProduct op;
-        
-		Optional <Order> o = this.getOrderById(order);
-		Order or = o.get();
-		
-        
+
+    public void save(Object object) {
+        Session session = null;
         try {
-            tx = session.beginTransaction();
-            
-            op = new OrderProduct(or, quantity, product);
-    		session.save(op);
-            
-            tx.commit();
+            session = this.sessionFactory.getCurrentSession();
+            session.save(object);
+        } catch (Exception e){
+            System.out.println(e.getMessage());
         }
-        catch (Exception e) {
-            if (tx!=null) tx.rollback();
-            throw e;
+    }
+
+    public void update(Object object) {
+        Session session = null;
+        try {
+            session = this.sessionFactory.getCurrentSession();
+            session.update(object);
+        } catch (Exception e){
+            System.out.println(e.getMessage());
         }
-        finally {
-            session.close();
-        }
-        return o;
-		
-		
-		
-	}
+    }
+
+/*    public String getCurrentStatus(Long order) {
+        //List<Product> products = null;
+        String queryStr = "FROM orderStatus WHERE order_id LIKE :order"
+        Query<Product> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
+        query.setParameter("order", order);
+        status = query.getResultList();
+
+        return status;
 
 
+
+    }*/
 }
 
