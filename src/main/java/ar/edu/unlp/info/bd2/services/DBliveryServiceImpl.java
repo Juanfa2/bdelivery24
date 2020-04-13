@@ -19,6 +19,7 @@ public class DBliveryServiceImpl implements DBliveryService {
 	public DBliveryServiceImpl(DBliveryRepository repository) {this.repository = repository;}
 
 	@Override
+	@Transactional
 	public Product createProduct(String name, Float price, Float weight, Supplier supplier) {
 		Product p = new Product(name, price, weight, supplier);
 		repository.save(p);
@@ -26,6 +27,7 @@ public class DBliveryServiceImpl implements DBliveryService {
 	}
 
 	@Override
+	@Transactional
 	public Supplier createSupplier(String name, String cuil, String address, Float coordX, Float coordY) {
 		Supplier s = new Supplier(name,cuil,address,coordX,coordY);
 		repository.save(s);
@@ -33,6 +35,7 @@ public class DBliveryServiceImpl implements DBliveryService {
 	}
 
 	@Override
+	@Transactional
 	public User createUser(String email, String password, String username, String name, Date dateOfBirth) {
 		User u = new User(email, password,username,name,dateOfBirth);
 		repository.save(u);
@@ -55,30 +58,35 @@ public class DBliveryServiceImpl implements DBliveryService {
 	}
 
 	@Override
+	@Transactional
 	public Optional<User> getUserById(Long id) {
 		Optional<User> u = repository.getUserById(id);
 		return u;
 	}
 
 	@Override
+	@Transactional
 	public Optional<User> getUserByEmail(String email) {
 		Optional<User> u = repository.getUserByEmail(email);
 		return u;
 	}
 
 	@Override
+	@Transactional
 	public Optional<User> getUserByUsername(String username) {
 		Optional<User> u = repository.getUserByUsername(username);
 		return u;
 	}
 
 	@Override
+	@Transactional
 	public Optional<Product> getProductById(Long id) {
 		Optional<Product> p = repository.getProductById(id);
 		return p;
 	}
 
 	@Override
+	@Transactional
 	public Optional<Order> getOrderById(Long id) {
 		Optional<Order> o = repository.getOrderById(id);
 		return o;
@@ -107,6 +115,7 @@ public class DBliveryServiceImpl implements DBliveryService {
 	}
 
 	@Override
+	@Transactional
 	public Order deliverOrder(Long order, User deliveryUser) throws DBliveryException {
 		Optional<Order> o = repository.getOrderById(order);
 		Order or = o.get();
@@ -120,6 +129,7 @@ public class DBliveryServiceImpl implements DBliveryService {
 	}
 
 	@Override
+	@Transactional
 	public Order cancelOrder(Long order) throws DBliveryException {
 		Optional<Order> o = repository.getOrderById(order);
 		Order or = o.get();
@@ -131,6 +141,7 @@ public class DBliveryServiceImpl implements DBliveryService {
 	}
 
 	@Override
+	@Transactional
 	public Order finishOrder(Long order) throws DBliveryException {
 		Optional<Order> o = repository.getOrderById(order);
 		Order or = o.get();
@@ -142,6 +153,7 @@ public class DBliveryServiceImpl implements DBliveryService {
 	}
 
 	@Override
+	@Transactional
 	public boolean canCancel(Long order) throws DBliveryException {
 
 
@@ -149,18 +161,21 @@ public class DBliveryServiceImpl implements DBliveryService {
 	}
 
 	@Override
+	@Transactional
 	public boolean canFinish(Long id) throws DBliveryException {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
+	@Transactional
 	public boolean canDeliver(Long order) throws DBliveryException {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
+	@Transactional
 	public OrderStatus getActualStatus(Long order) {
 
 		OrderStatus actualStatus = repository.getLastStatus(order);
@@ -169,6 +184,7 @@ public class DBliveryServiceImpl implements DBliveryService {
 	}
 
 	@Override
+	@Transactional
 	public List<Product> getProductByName(String name) {
 		List<Product> p = repository.getProductByName(name);
 		return p;

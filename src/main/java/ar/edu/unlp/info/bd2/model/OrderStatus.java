@@ -15,6 +15,8 @@ public class OrderStatus {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
+	private Status statu;
 	
 	@Column(name = "status")
 	private String status;
@@ -37,6 +39,9 @@ public class OrderStatus {
 		this.setOrder(order);
 		this.setStatus(status);
 		this.setStartDate(startDate);
+
+		//ver si es asi
+		this.setStatu(new Pending(this));
 	}
 
 	private void setStartDate(Date startDate) {
@@ -49,6 +54,14 @@ public class OrderStatus {
 
 	public void setOrder(Order order) {
 		this.order = order;
+	}
+
+	public void setStatu(Status e){
+		this.statu = e;
+	}
+
+	public String getStatu(){
+		return this.statu.getStatus();
 	}
 
 	
