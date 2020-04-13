@@ -106,7 +106,7 @@ public class DBliveryRepository{
         }
     }
 
-/*    public String getCurrentStatus(Long order) {
+  /*  public String getCurrentStatus(Long order) {
         //List<Product> products = null;
         String queryStr = "FROM orderStatus WHERE order_id LIKE :order"
         Query<Product> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
@@ -115,8 +115,16 @@ public class DBliveryRepository{
 
         return status;
 
-
-
     }*/
+
+    public OrderStatus getLastStatus(Long order) {
+        String queryStr = "FROM OrderStatus WHERE order_id LIKE :order ORDER BY startDate DESC";
+        Query<OrderStatus> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
+        query.setParameter("order", order);
+        query.setMaxResults(1);
+        OrderStatus status = query.uniqueResult();
+
+        return status;
+    }
 }
 

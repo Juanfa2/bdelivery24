@@ -167,7 +167,7 @@ public class DBliveryServiceTestCase {
         Order o4 = this.service.finishOrder(o3.getId());
         assertNotNull(o4.getId());
         assertEquals(3,o3.getStatus().size());
-    //    assertEquals(this.service.getActualStatus(o4.getId()).getStatus(),"Delivered");
+        assertEquals(this.service.getActualStatus(o4.getId()).getStatus(),"Delivered");
     }
     
     @Test

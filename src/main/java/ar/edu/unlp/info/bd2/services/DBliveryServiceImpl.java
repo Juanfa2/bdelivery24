@@ -108,34 +108,43 @@ public class DBliveryServiceImpl implements DBliveryService {
 
 	@Override
 	public Order deliverOrder(Long order, User deliveryUser) throws DBliveryException {
-		// TODO Auto-generated method stub
+		Optional<Order> o = repository.getOrderById(order);
+		Order or = o.get();
+
+		OrderStatus newStatus = new OrderStatus(or, "Sent");
+		or.updateOrderStatus(newStatus);
+		repository.update(or);
+		repository.save(newStatus);
+
 		return null;
 	}
 
 	@Override
 	public Order cancelOrder(Long order) throws DBliveryException {
-		// TODO Auto-generated method stub
+		Optional<Order> o = repository.getOrderById(order);
+		Order or = o.get();
+
+		OrderStatus newStatus = new OrderStatus(or, "Cancelled");
+		or.updateOrderStatus(newStatus);
+
 		return null;
 	}
 
 	@Override
 	public Order finishOrder(Long order) throws DBliveryException {
-		/**
-		 * Registra la entrega de un pedido.
-		 * @param order pedido a finalizar
-		 * @return el pedido modificado
-		 * @throws DBliveryException en caso que no exista el pedido o si el mismo no esta en estado Send
-		 */
-		//Order o = this.getOrderById(order).get();
-		//String status = repository.getCurrentStatus(order);
+		Optional<Order> o = repository.getOrderById(order);
+		Order or = o.get();
 
-		// TODO Auto-generated method stub
+        OrderStatus newStatus = new OrderStatus(or, "Delivered");
+		or.updateOrderStatus(newStatus);
+
 		return null;
 	}
 
 	@Override
 	public boolean canCancel(Long order) throws DBliveryException {
-		// TODO Auto-generated method stub
+
+
 		return false;
 	}
 
@@ -151,12 +160,13 @@ public class DBliveryServiceImpl implements DBliveryService {
 		return false;
 	}
 
-	/*@Override
+	@Override
 	public OrderStatus getActualStatus(Long order) {
-		// TODO Auto-generated method stub
-		OrderStatus o = null; //= new OrderStatus();
-		return o;
-	}*/
+
+		OrderStatus actualStatus = repository.getLastStatus(order);
+
+		return actualStatus;
+	}
 
 	@Override
 	public List<Product> getProductByName(String name) {

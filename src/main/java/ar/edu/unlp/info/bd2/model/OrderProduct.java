@@ -4,13 +4,13 @@ import javax.persistence.*;
 
 
 
-import java.util.ArrayList;
+/*import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import ar.edu.unlp.info.bd2.config.AppConfig;
-import ar.edu.unlp.info.bd2.config.HibernateConfiguration;
+import ar.edu.unlp.info.bd2.config.HibernateConfiguration;*/
 
 @Entity
 @Table(name = "order_product")

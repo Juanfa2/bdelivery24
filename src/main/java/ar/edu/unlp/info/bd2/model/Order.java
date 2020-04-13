@@ -39,7 +39,7 @@ public class Order {
 	private List<OrderProduct> orderProduct = new ArrayList<>();
 	
 
-	@OneToMany( mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany( mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<OrderStatus> orderStatus = new ArrayList<>();
 	
 	
@@ -139,7 +139,10 @@ public class Order {
 
 	public void addOrderProduct(OrderProduct orderProduct) {
 		this.orderProduct.add(orderProduct);
+	}
 
+	public void updateOrderStatus(OrderStatus orderStatus) {
+		this.orderStatus.add(orderStatus);
 	}
 
 }
