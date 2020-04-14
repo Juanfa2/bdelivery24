@@ -1,28 +1,21 @@
 package ar.edu.unlp.info.bd2.model;
 
-public class Sent implements Status{
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "sent")
+public class Sent extends OrderStatus{
     private String status;
     private OrderStatus orderStatus;
 
-    public Sent(OrderStatus orderStatus){
-        this.setStatus("Sent");
-        this.setOrderStatus(orderStatus);
+    public Sent(Order order){
+        super(order,"Sent" );
     }
 
     @Override
-    public String getStatus() {
-        return this.status;
-    }
-
-    public void setStatus(String status){
-        this.status = status;
-    }
-
-    public void setOrderStatus(OrderStatus orderStatus) {
-        this.orderStatus = orderStatus;
-    }
     public void entregarOrder(){
-        this.orderStatus.setStatu(new Delivered(this.orderStatus));
+        this.order.setStatus(new Delivered(this.order));
     }
     public void cancelarOrder(){}
     public void enviarOrder(){}

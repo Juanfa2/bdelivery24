@@ -1,25 +1,18 @@
 package ar.edu.unlp.info.bd2.model;
 
-public class Delivered implements Status{
-    private String status;
-    private OrderStatus orderStatus;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
-    public Delivered(OrderStatus orderStatus){
-        this.setStatus("Delivered");
-        this.setOrderStatus(orderStatus);
+@Entity
+@Table(name = "delivered")
+public class Delivered extends OrderStatus{
+
+
+    public Delivered(Order order){
+        super(order, "Delivered");
     }
 
     @Override
-    public String getStatus() {
-        return this.status;
-    }
-    public void setOrderStatus(OrderStatus orderStatus) {
-        this.orderStatus = orderStatus;
-    }
-
-    public void setStatus(String status){
-        this.status = status;
-    }
     public void entregarOrder(){}
     public void cancelarOrder(){}
     public void enviarOrder(){}

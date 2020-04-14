@@ -1,33 +1,24 @@
 package ar.edu.unlp.info.bd2.model;
 
-public class Pending implements Status{
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
-    private String status;
-    private OrderStatus orderStatus;
+@Entity
+@Table(name = "pending")
+public class Pending extends OrderStatus{
 
-    public Pending (OrderStatus orderStatus){
-        this.setStatus("Pending");
-        this.setOrderStatus(orderStatus);
+
+
+    public Pending (Order order){
+        super(order,"Pending" );
     }
 
     @Override
-    public String getStatus() {
-     return this.status;
-    }
-
-    public void setOrderStatus(OrderStatus orderStatus) {
-        this.orderStatus = orderStatus;
-    }
-
     public void cancelarOrder(){
-       this.orderStatus.setStatu(new Cancelled(this.orderStatus));
-    }
-
-    public void setStatus(String status){
-        this.status = status;
+       this.order.setStatus(new Cancelled(this.order));
     }
     public void enviarOrder(){
-        this.orderStatus.setStatu(new Sent(this.orderStatus));
+        this.order.setStatus(new Sent(this.order));
     }
     public void entregarOrder(){}
 }

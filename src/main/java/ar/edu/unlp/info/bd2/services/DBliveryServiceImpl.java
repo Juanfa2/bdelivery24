@@ -119,11 +119,12 @@ public class DBliveryServiceImpl implements DBliveryService {
 	public Order deliverOrder(Long order, User deliveryUser) throws DBliveryException {
 		Optional<Order> o = repository.getOrderById(order);
 		Order or = o.get();
+		or.sentOrder();
 
-		OrderStatus newStatus = new OrderStatus(or, "Sent");
-		or.updateOrderStatus(newStatus);
+		//OrderStatus newStatus = new OrderStatus(or, "Sent");
+		//or.updateOrderStatus(newStatus);
 		repository.update(or);
-		repository.save(newStatus);
+		//repository.save(newStatus);
 
 		return null;
 	}
@@ -133,9 +134,10 @@ public class DBliveryServiceImpl implements DBliveryService {
 	public Order cancelOrder(Long order) throws DBliveryException {
 		Optional<Order> o = repository.getOrderById(order);
 		Order or = o.get();
+		or.cancelOrder();
 
-		OrderStatus newStatus = new OrderStatus(or, "Cancelled");
-		or.updateOrderStatus(newStatus);
+		//OrderStatus newStatus = new OrderStatus(or, "Cancelled");
+		//or.updateOrderStatus(newStatus);
 
 		return null;
 	}
@@ -145,9 +147,10 @@ public class DBliveryServiceImpl implements DBliveryService {
 	public Order finishOrder(Long order) throws DBliveryException {
 		Optional<Order> o = repository.getOrderById(order);
 		Order or = o.get();
+		or.deliveredOrder();
 
-        OrderStatus newStatus = new OrderStatus(or, "Delivered");
-		or.updateOrderStatus(newStatus);
+        //OrderStatus newStatus = new OrderStatus(or, "Delivered");
+		//or.updateOrderStatus(newStatus);
 
 		return null;
 	}
@@ -155,23 +158,34 @@ public class DBliveryServiceImpl implements DBliveryService {
 	@Override
 	@Transactional
 	public boolean canCancel(Long order) throws DBliveryException {
-
-
-		return false;
+		OrderStatus o = repository.getLastStatus(order);
+		if (o.getStatus()=="Pending"){
+			return true;
+		}else {
+			return false;
+		}
 	}
 
 	@Override
 	@Transactional
 	public boolean canFinish(Long id) throws DBliveryException {
-		// TODO Auto-generated method stub
-		return false;
+		OrderStatus o = repository.getLastStatus(id);
+		if (o.getStatus()=="Sent"){
+			return true;
+		}else {
+			return false;
+		}
 	}
 
 	@Override
 	@Transactional
 	public boolean canDeliver(Long order) throws DBliveryException {
-		// TODO Auto-generated method stub
-		return false;
+		OrderStatus o = repository.getLastStatus(order);
+		if (o.getStatus()=="Pending"){
+			return true;
+		}else {
+			return false;
+		}
 	}
 
 	@Override

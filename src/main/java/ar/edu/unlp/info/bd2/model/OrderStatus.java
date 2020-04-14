@@ -10,23 +10,23 @@ import ar.edu.unlp.info.bd2.config.HibernateConfiguration;*/
 
 @Entity
 @Table(name = "orderStatus")
-public class OrderStatus {
+@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
+public abstract class OrderStatus {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	protected Long id;
 
-	private Status statu;
 	
 	@Column(name = "status")
-	private String status;
+	protected String status;
 
 	@Column(name="startDate")
-	private Date startDate;
+	protected Date startDate;
 	
 	@ManyToOne
 	@JoinColumn(name= "order_id")
-	private Order order;
+	protected Order order;
 	
 	public OrderStatus() {
 		
@@ -35,19 +35,14 @@ public class OrderStatus {
 	public OrderStatus(Order order, String status) {
 		Calendar cal = Calendar.getInstance();
 		Date startDate = cal.getTime();
-
 		this.setOrder(order);
-		this.setStatus(status);
 		this.setStartDate(startDate);
-
-		//ver si es asi
-		this.setStatu(new Pending(this));
+		this.setStatus(status);
 	}
 
 	private void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
-
 	public Order getOrder() {
 		return order;
 	}
@@ -56,29 +51,19 @@ public class OrderStatus {
 		this.order = order;
 	}
 
-	public void setStatu(Status e){
-		this.statu = e;
-	}
-
-	public String getStatu(){
-		return this.statu.getStatus();
-	}
-
-	
-	
-	public OrderStatus(String status) {
-		this.setStatus(status);
-	}
-	
-	public void setStatus(String status) {
-		this.status = status;
-	}
-	
 	public String getStatus(){
 		return this.status;
+	}
+	public void setStatus(String status){
+		this.status=status;
 	}
 	
 	public Long getId() {
 		return this.id;
 	}
+
+	abstract void entregarOrder();
+	abstract void cancelarOrder();
+	abstract void enviarOrder();
+
 }

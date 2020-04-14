@@ -52,7 +52,7 @@ public class Order {
 		this.setCoordX(coordX);
 		this.setCoordY(coordY);
 		this.setClient(client);
-		this.setOrderStatus(new OrderStatus(this, "Pending"));
+		this.setOrderStatus(new Pending(this));
 		
 	}
 
@@ -143,6 +143,23 @@ public class Order {
 
 	public void updateOrderStatus(OrderStatus orderStatus) {
 		this.orderStatus.add(orderStatus);
+	}
+	public void setStatus(OrderStatus orderStatus){
+		this.orderStatus.add(orderStatus);
+	}
+
+	public void cancelOrder(){
+		OrderStatus orderS = this.orderStatus.get(orderStatus.size()-1);
+		orderS.cancelarOrder();
+	}
+
+	public void sentOrder(){
+		OrderStatus orderS = this.orderStatus.get(orderStatus.size()-1);
+		orderS.enviarOrder();
+	}
+	public void deliveredOrder(){
+		OrderStatus orderS = this.orderStatus.get(orderStatus.size()-1);
+		orderS.entregarOrder();
 	}
 
 }
