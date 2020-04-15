@@ -5,7 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "cancelled")
+//@Table(name = "cancelled")
 public class Cancelled extends OrderStatus{
 
 

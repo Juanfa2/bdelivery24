@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "pending")
+//@Table(name = "pending")
 public class Pending extends OrderStatus{
 
 
