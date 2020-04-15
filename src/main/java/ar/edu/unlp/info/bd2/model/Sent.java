@@ -4,13 +4,24 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
+//@Table(name = "sent")
 public class Sent extends OrderStatus{
+    private String status;
+ //   private OrderStatus orderStatus;
+
 
     public Sent(Order order){
-        super(order,"Sent" );
+        super(order);
+        this.setStatus("Sent");
     }
 
     @Override
+    public void setStatus(String status){
+        this.status=status;
+    }
+    public String getStatus(){
+        return this.status;
+    }
     public void entregarOrder(){
         this.order.setStatus(new Delivered(this.order));
     }
