@@ -32,12 +32,12 @@ public abstract class OrderStatus {
 		
 	}
 	
-	public OrderStatus(Order order, String status) {
+	public OrderStatus(Order order) {
 		Calendar cal = Calendar.getInstance();
 		Date startDate = cal.getTime();
 		this.setOrder(order);
 		this.setStartDate(startDate);
-		this.setStatus(status);
+
 	}
 
 	private void setStartDate(Date startDate) {
@@ -51,12 +51,8 @@ public abstract class OrderStatus {
 		this.order = order;
 	}
 
-	public String getStatus(){
-		return this.status;
-	}
-	public void setStatus(String status){
-		this.status=status;
-	}
+	abstract public String getStatus();
+	abstract void setStatus(String status);
 	
 	public Long getId() {
 		return this.id;

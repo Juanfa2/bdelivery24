@@ -39,7 +39,7 @@ public class Order {
 	private List<OrderProduct> orderProduct = new ArrayList<>();
 	
 
-	@OneToMany( mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany( targetEntity = OrderStatus.class, mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<OrderStatus> orderStatus = new ArrayList<>();
 	
 	

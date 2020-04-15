@@ -118,48 +118,67 @@ public class DBliveryServiceImpl implements DBliveryService {
 	@Transactional
 	public Order deliverOrder(Long order, User deliveryUser) throws DBliveryException {
 		Optional<Order> o = repository.getOrderById(order);
-		Order or = o.get();
-		or.sentOrder();
+		List<OrderStatus> or  = o.get().getOrderStatus();
+		OrderStatus orde = or.get(or.size()-1);
+		if (orde.getStatus().equals("Pending") &&  o.get().getProducts().size()>0){
 
-		//OrderStatus newStatus = new OrderStatus(or, "Sent");
-		//or.updateOrderStatus(newStatus);
-		repository.update(or);
-		//repository.save(newStatus);
+			Order ord = o.get();
+			ord.setDeliveryUser(deliveryUser);
+			ord.sentOrder();
 
-		return null;
+			//OrderStatus newStatus = new OrderStatus(or, "Sent");
+			//or.updateOrderStatus(newStatus);
+			repository.update(ord);
+			//repository.save(newStatus);
+
+			return ord;
+		}else {
+			throw new DBliveryException("The order can't be delivered");
+		}
+
+
+
 	}
 
 	@Override
 	@Transactional
 	public Order cancelOrder(Long order) throws DBliveryException {
+
 		Optional<Order> o = repository.getOrderById(order);
-		Order or = o.get();
-		or.cancelOrder();
+		List<OrderStatus> or  = o.get().getOrderStatus();
+		OrderStatus orde = or.get(or.size()-1);
+		if (orde.getStatus().equals("Pending")){
+			Order ord = o.get();
+			ord.cancelOrder();
+			return ord;
+		}else {
+			throw new DBliveryException("The order can't be cancelled");
+		}
 
-		//OrderStatus newStatus = new OrderStatus(or, "Cancelled");
-		//or.updateOrderStatus(newStatus);
-
-		return null;
 	}
 
 	@Override
 	@Transactional
 	public Order finishOrder(Long order) throws DBliveryException {
 		Optional<Order> o = repository.getOrderById(order);
-		Order or = o.get();
-		or.deliveredOrder();
-
-        //OrderStatus newStatus = new OrderStatus(or, "Delivered");
-		//or.updateOrderStatus(newStatus);
-
-		return null;
+		List<OrderStatus> or  = o.get().getOrderStatus();
+		OrderStatus orde = or.get(or.size()-1);
+		if (orde.getStatus().equals("Sent")){
+			Order ord = o.get();
+			ord.deliveredOrder();
+			return ord;
+		}else {
+			throw new DBliveryException("The order can't be finished");
+		}
 	}
 
 	@Override
 	@Transactional
 	public boolean canCancel(Long order) throws DBliveryException {
-		OrderStatus o = repository.getLastStatus(order);
-		if (o.getStatus()=="Pending"){
+		Optional<Order> o = repository.getOrderById(order);
+		List<OrderStatus> or  = o.get().getOrderStatus();
+		OrderStatus orde = or.get(or.size()-1);
+		if (orde.getStatus().equals("Pending")){
 			return true;
 		}else {
 			return false;
@@ -169,8 +188,10 @@ public class DBliveryServiceImpl implements DBliveryService {
 	@Override
 	@Transactional
 	public boolean canFinish(Long id) throws DBliveryException {
-		OrderStatus o = repository.getLastStatus(id);
-		if (o.getStatus()=="Sent"){
+		Optional<Order> o = repository.getOrderById(id);
+		List<OrderStatus> or  = o.get().getOrderStatus();
+		OrderStatus orde = or.get(or.size()-1);
+		if (orde.getStatus().equals("Sent")){
 			return true;
 		}else {
 			return false;
@@ -180,8 +201,10 @@ public class DBliveryServiceImpl implements DBliveryService {
 	@Override
 	@Transactional
 	public boolean canDeliver(Long order) throws DBliveryException {
-		OrderStatus o = repository.getLastStatus(order);
-		if (o.getStatus()=="Pending"){
+		Optional<Order> o = repository.getOrderById(order);
+		List<OrderStatus> or  = o.get().getOrderStatus();
+		OrderStatus orde = or.get(or.size()-1);
+		if (orde.getStatus().equals("Pending") &&  o.get().getProducts().size()>0){
 			return true;
 		}else {
 			return false;
@@ -192,9 +215,11 @@ public class DBliveryServiceImpl implements DBliveryService {
 	@Transactional
 	public OrderStatus getActualStatus(Long order) {
 
-		OrderStatus actualStatus = repository.getLastStatus(order);
+		Optional<Order> o = repository.getOrderById(order);
+		List<OrderStatus> or  = o.get().getOrderStatus();
+		OrderStatus orde = or.get(or.size()-1);
 
-		return actualStatus;
+		return orde;
 	}
 
 	@Override

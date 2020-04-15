@@ -103,7 +103,8 @@ public interface DBliveryService extends DBliveryStatisticsService{
 	 * @param order pedido al cual se le agrega el producto
 	 * @param quantity cantidad de producto a agregar
 	 * @param product producto a agregar
-	 * @return el pedido con el nuevo producto
+	 * @return el pedido con el nuevo prod
+	 * ucto
 	 * @throws DBliveryException en caso de no existir el pedido
 	 */
 	Order addProduct (Long order,Long quantity, Product product )throws DBliveryException;
