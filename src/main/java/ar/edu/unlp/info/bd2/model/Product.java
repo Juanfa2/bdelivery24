@@ -30,7 +30,10 @@ public class Product {
 	private Float price ;
 	
 	@Column(name="weight")
-	private Float weight; 
+	private Float weight;
+
+	@Column(name= "date")
+	private Date date;
 	
 	
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -53,6 +56,24 @@ public class Product {
 		this.setWeight(weight);
 		this.setSupplier(supplier);
 		this.prices.add(new Price(this,price,startDate));
+	}
+	public Product (String name, Float price, Float weight, Supplier supplier, Date date) {
+		Calendar cal = Calendar.getInstance();
+		Date startDate = cal.getTime();
+
+		this.setName(name);
+		this.setPrice(price);
+		this.setWeight(weight);
+		this.setSupplier(supplier);
+		this.setDate(date);
+		this.prices.add(new Price(this,price,startDate));
+	}
+
+	public void setDate(Date date){
+		this.date = date;
+	}
+	public Date getDate(){
+		return this.date;
 	}
 
 	public void setName(String name) {

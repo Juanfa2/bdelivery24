@@ -34,10 +34,7 @@ public abstract class OrderStatus {
 	
 	public OrderStatus(Order order) {
 		Calendar cal = Calendar.getInstance();
-		Date startDate = cal.getTime();
 		this.setOrder(order);
-		this.setStartDate(startDate);
-
 	}
 
 	private void setStartDate(Date startDate) {
@@ -61,5 +58,8 @@ public abstract class OrderStatus {
 	abstract void entregarOrder();
 	abstract void cancelarOrder();
 	abstract void enviarOrder();
+	abstract void enviarOrder(Date date);
+	abstract void entregarOrder(Date date);
+	abstract void cancelarOrder(Date date);
 
 }

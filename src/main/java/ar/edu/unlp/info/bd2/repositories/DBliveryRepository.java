@@ -126,5 +126,15 @@ public class DBliveryRepository{
 
         return status;
     }
+
+
+    public List<Order> getOrderByUser(String username){
+        String queryStr = "from Order o  where o.client.username = :username";
+        Query<Order> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
+        query.setParameter("username", username);
+        List<Order> orders = query.getResultList();
+        return orders;
+    }
+
 }
 
