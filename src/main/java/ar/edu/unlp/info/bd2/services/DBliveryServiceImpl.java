@@ -291,12 +291,16 @@ public class DBliveryServiceImpl implements DBliveryService {
 		return p;
 	}
 
+	//---------------------------TP2---------------------------------------//
+
 	@Override
 	@Transactional
 	public List<Order> getAllOrdersMadeByUser(String username) {
 		List<Order> orders = repository.getOrderByUser(username);
 		return orders;
 	}
+
+
 
 	@Override
 	@Transactional
@@ -307,49 +311,57 @@ public class DBliveryServiceImpl implements DBliveryService {
 	@Override
 	@Transactional
 	public List<Supplier> getTopNSuppliersInSentOrders(int n) {
-		return null;
+		List<Supplier> suppliers = repository.suppliersInSentOrders(n);
+		return suppliers;
 	}
 
 	@Override
 	@Transactional
 	public List<Product> getTop10MoreExpensiveProducts(){
-		return null;
+		List<Product> products = repository.topExpensiveProducts();
+		return products;
 	}
 
 	@Override
 	@Transactional
 	public List<User> getTop6UsersMoreOrders(){
-		return null;
+		List <User> users = repository.topUsersMoreOrders();
+		return users;
 	}
 
 	@Override
 	@Transactional
 	public List<Order> getCancelledOrdersInPeriod(Date startDate, Date endDate){
-		return null;
+		List<Order> orders = repository.cancelleddOrdersInPeriod(startDate,endDate);
+		return orders;
 	}
 
 	@Override
 	@Transactional
 	public List<Order> getPendingOrders(){
-		return null;
+		List<Order> orders = repository.pendingOrders();
+		return orders;
 	}
 
 	@Override
 	@Transactional
 	public List<Order> getSentOrders(){
-		return null;
+		List<Order> orders = repository.sentOrders();
+		return orders;
 	}
 
 	@Override
 	@Transactional
 	public List<Order> getDeliveredOrdersInPeriod(Date startDate, Date endDate){
-		return null;
+		List<Order> orders = repository.deliveredOrdersInPeriod(startDate,endDate);
+		return orders;
 	}
 
 	@Override
 	@Transactional
 	public List<Order> getDeliveredOrdersForUser(String username){
-		return null;
+		List<Order> orders = repository.deliveredOrdersUser(username);
+		return orders;
 	}
 
 	@Override
@@ -367,7 +379,8 @@ public class DBliveryServiceImpl implements DBliveryService {
 	@Override
 	@Transactional
 	public List<User> get5LessDeliveryUsers(){
-		return null;
+		List<User> users = repository.lessDeliveryUser();
+		return users;
 	}
 
 	@Override
@@ -391,7 +404,8 @@ public class DBliveryServiceImpl implements DBliveryService {
 	@Override
 	@Transactional
 	public Supplier getSupplierLessExpensiveProduct(){
-		return null;
+		Supplier supplier = repository.supplierLessExpensiveProduct();
+		return supplier;
 	}
 
 	@Override
@@ -415,7 +429,8 @@ public class DBliveryServiceImpl implements DBliveryService {
 	@Override
 	@Transactional
 	public List<Object[]> getProductsWithPriceAt(Date day){
-		return null;
+		List<Object[]> prices =  repository.productsWithPriceAt(day);
+		return prices;
 	}
 
 	@Override

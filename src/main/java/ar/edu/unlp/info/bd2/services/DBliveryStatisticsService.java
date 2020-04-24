@@ -15,7 +15,8 @@ public interface DBliveryStatisticsService {
 	List<Order> getAllOrdersMadeByUser(String username);
 
 	/**
-	 * Obtiene todos los usuarios que han gastando más de <code>amount</code> en alguna orden en la plataforma
+	 * Obtiene todos los usuarios que han
+	 * más de <code>amount</code> en alguna orden en la plataforma
 	 * @param amount
 	 * @return una lista de usuarios que satisfagan la condici{on
 	 */

@@ -127,6 +127,7 @@ public class DBliveryRepository{
         return status;
     }
 
+    //---------------------------------------TP2 -------------------------------//
 
     public List<Order> getOrderByUser(String username){
         String queryStr = "from Order o  where o.client.username = :username";
@@ -134,6 +135,98 @@ public class DBliveryRepository{
         query.setParameter("username", username);
         List<Order> orders = query.getResultList();
         return orders;
+    }
+
+    public List<Product> topExpensiveProducts(){
+        String queryStr = "from Product p  ORDER BY p.price DESC";
+        Query<Product> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
+        List<Product> products = query.setMaxResults(9).getResultList();
+        return products;
+
+    }
+
+    public List<Order> pendingOrders(){
+        String queryStr = "from Order o  where o.actualStatus.status= :status";
+        Query<Order> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
+        query.setParameter("status", "Pending");
+        List<Order> orders = query.getResultList();
+        return orders;
+    }
+
+    public List<Order> sentOrders(){
+        String queryStr = "from Order o  where o.actualStatus.status = :status";
+        Query<Order> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
+        query.setParameter("status", "Sent");
+        List<Order> orders = query.getResultList();
+        return orders;
+    }
+
+    public List<Order> deliveredOrdersUser(String username){
+        String queryStr = "from Order o  where o.actualStatus.status = :status and o.client.username = :username";
+        Query<Order> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
+        query.setParameter("status", "Delivered");
+        query.setParameter("username", username);
+        List<Order> orders = query.getResultList();
+        return orders;
+    }
+
+    public List<User> topUsersMoreOrders(){
+        String queryStr = "select o.client from Order o  group by o.client ORDER BY count(o.client) DESC";
+        Query<User> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
+        List<User> users = query.setMaxResults(6).getResultList();
+        return users;
+    }
+
+    public List<User> lessDeliveryUser(){
+        String queryStr = "select o.deliveryUser from Order o where o.actualStatus.status = :sent or o.actualStatus = :delivered group by o.deliveryUser ORDER BY count(o.deliveryUser) ASC";
+        Query<User> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
+        query.setParameter("delivered", "Delivered");
+        query.setParameter("sent", "Sent");
+        List<User> users = query.setMaxResults(5).getResultList();
+        return users;
+    }
+
+    public List<Supplier> suppliersInSentOrders(int n){
+        String queryStr = "select o.producto.supplier from OrderProduct o where o.orderP.actualStatus.status = :sent group by o.producto.supplier ORDER BY count(*) ASC";
+        Query<Supplier> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
+        query.setParameter("sent", "Sent");
+        List<Supplier> suppliers = query.setMaxResults(n).getResultList();
+        return suppliers;
+    }
+
+    public List<Order> deliveredOrdersInPeriod(Date startDate, Date endDate){
+        String queryStr = "from Order o  where o.actualStatus.status= :status and o.actualStatus.startDate between :start and :end ";
+        Query<Order> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
+        query.setParameter("status", "Delivered");
+        query.setParameter("start", startDate);
+        query.setParameter("end", endDate);
+        List<Order> orders = query.getResultList();
+        return orders;
+    }
+    public List<Order> cancelleddOrdersInPeriod(Date startDate, Date endDate){
+        String queryStr = "from Order o  where o.actualStatus.status= :status and o.actualStatus.startDate between :start and :end ";
+        Query<Order> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
+        query.setParameter("status", "Cancelled");
+        query.setParameter("start", startDate);
+        query.setParameter("end", endDate);
+        List<Order> orders = query.getResultList();
+        return orders;
+    }
+
+    public Supplier supplierLessExpensiveProduct(){
+        String queryStr = "select p.products.supplier FROM Price p  ORDER BY p.price ASC";
+        Query<Supplier> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
+        Supplier supp = query.setMaxResults(1).uniqueResult();
+        return supp;
+
+    }
+
+    public List<Object[]> productsWithPriceAt(Date day){
+        String queryStr = "select p.products, p.price FROM Price p  WHERE p.startDate <= :day  ";
+        Query<Object[]> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
+        query.setParameter("day", day);
+        List<Object[]> prices = query.getResultList();
+        return prices;
     }
 
 }

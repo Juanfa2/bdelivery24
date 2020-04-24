@@ -21,6 +21,10 @@ public class Order {
 	@Column(name="coordY")
 	private Float coordY;
 
+	@ManyToOne
+	@JoinColumn(name="actual_status")
+	private OrderStatus actualStatus;
+
 
 	@ManyToOne
 	@JoinColumn(name="client_id")
@@ -53,6 +57,7 @@ public class Order {
 		this.setCoordY(coordY);
 		this.setClient(client);
 		this.setOrderStatus(new Pending(this ,dateOfOrder));
+		this.setActualStatus();
 
 	}
 
@@ -148,30 +153,46 @@ public class Order {
 		this.orderStatus.add(orderStatus);
 	}
 
+	public void setActualStatus(){
+		this.actualStatus = this.orderStatus.get(orderStatus.size()-1);
+
+	}
+
+	public OrderStatus getActualStatus(){
+		return this.actualStatus;
+	}
+
+
 	public void cancelOrder(){
 		OrderStatus orderS = this.orderStatus.get(orderStatus.size()-1);
 		orderS.cancelarOrder();
+		this.setActualStatus();
 	}
 	public void cancelOrder(Date date){
 		OrderStatus orderS = this.orderStatus.get(orderStatus.size()-1);
 		orderS.cancelarOrder(date);
+		this.setActualStatus();
 	}
 
 	public void sentOrder(){
 		OrderStatus orderS = this.orderStatus.get(orderStatus.size()-1);
 		orderS.enviarOrder();
+		this.setActualStatus();
 	}
 	public void sentOrder(Date date){
 		OrderStatus orderS = this.orderStatus.get(orderStatus.size()-1);
 		orderS.enviarOrder(date);
+		this.setActualStatus();
 	}
 	public void deliveredOrder(){
 		OrderStatus orderS = this.orderStatus.get(orderStatus.size()-1);
 		orderS.entregarOrder();
+		this.setActualStatus();
 	}
 	public void deliveredOrder(Date date){
 		OrderStatus orderS = this.orderStatus.get(orderStatus.size()-1);
 		orderS.entregarOrder(date);
+		this.setActualStatus();
 	}
 
 }
