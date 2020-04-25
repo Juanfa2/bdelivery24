@@ -58,15 +58,13 @@ public class Product {
 		this.prices.add(new Price(this,price,startDate));
 	}
 	public Product (String name, Float price, Float weight, Supplier supplier, Date date) {
-		Calendar cal = Calendar.getInstance();
-		Date startDate = cal.getTime();
 
 		this.setName(name);
 		this.setPrice(price);
 		this.setWeight(weight);
 		this.setSupplier(supplier);
 		this.setDate(date);
-		this.prices.add(new Price(this,price,startDate));
+		this.prices.add(new Price(this,price,date));
 	}
 
 	public void setDate(Date date){

@@ -367,13 +367,15 @@ public class DBliveryServiceImpl implements DBliveryService {
 	@Override
 	@Transactional
 	public List<Order> getSentMoreOneHour(){
-		return null;
+		List<Order> orders = repository.sentMoreOneHour();
+		return orders;
 	}
 
 	@Override
 	@Transactional
 	public List<Order> getDeliveredOrdersSameDay(){
-		return null;
+		List<Order> orders = repository.deliveredOrdersSameDay();
+		return orders;
 	}
 
 	@Override
@@ -392,7 +394,8 @@ public class DBliveryServiceImpl implements DBliveryService {
 	@Override
 	@Transactional
 	public List<Product> getProductsOnePrice(){
-		return null;
+		List<Product> products = repository.productsOnePrice();
+		return products;
 	}
 
 	@Override
@@ -423,7 +426,8 @@ public class DBliveryServiceImpl implements DBliveryService {
 	@Override
 	@Transactional
 	public List<Order> getOrdersCompleteMorethanOneDay(){
-		return null;
+		List<Order> orders = repository.ordersCompleteMorethanOneDay();
+		return orders;
 	}
 
 	@Override
@@ -436,7 +440,8 @@ public class DBliveryServiceImpl implements DBliveryService {
 	@Override
 	@Transactional
 	public List <Product> getProductsNotSold(){
-		return null;
+		List<Product> products = repository.productsNotSold();
+		return products;
 	}
 
 	@Override
