@@ -276,5 +276,16 @@ public class DBliveryRepository{
         return orders;
 
     }
+
+    public List<Product> getProductsOnePrice() {
+        String queryStr = "SELECT pri.products " +
+                "FROM Price pri " +
+                "GROUP BY pri.products " +
+                "HAVING count(pri.price) = 1";
+        Query<Product> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
+        List<Product> prod = query.getResultList();
+
+        return prod;
+    }
 }
 

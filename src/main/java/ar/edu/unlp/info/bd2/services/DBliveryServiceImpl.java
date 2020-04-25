@@ -395,7 +395,8 @@ public class DBliveryServiceImpl implements DBliveryService {
 	@Override
 	@Transactional
 	public List<Product> getProductsOnePrice(){
-		return null;
+		List<Product> prod = repository.getProductsOnePrice();
+		return prod;
 	}
 
 	@Override
