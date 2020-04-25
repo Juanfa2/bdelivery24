@@ -287,5 +287,16 @@ public class DBliveryRepository{
 
         return prod;
     }
+
+    public List<Product> getProductsIncreaseMoreThan100() {
+        String queryStr = "SELECT pri.products " +
+                "FROM Price pri " +
+                "GROUP BY pri.products " +
+                "HAVING min(pri.price) * 2 < max(pri.price)";
+        Query<Product> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
+        List<Product> prod = query.getResultList();
+
+        return prod;
+    }
 }
 

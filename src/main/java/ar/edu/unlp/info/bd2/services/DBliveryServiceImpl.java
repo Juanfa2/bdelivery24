@@ -402,7 +402,8 @@ public class DBliveryServiceImpl implements DBliveryService {
 	@Override
 	@Transactional
 	public List<Product> getProductIncreaseMoreThan100(){
-		return null;
+		List<Product> prod = repository.getProductsIncreaseMoreThan100();
+		return prod;
 	}
 
 	@Override
