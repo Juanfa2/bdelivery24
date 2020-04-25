@@ -428,7 +428,9 @@ public class DBliveryServiceImpl implements DBliveryService {
 	@Override
 	@Transactional
 	public List<Order> getOrdersCompleteMorethanOneDay(){
-		return null;
+		List<Order> orders =  repository.ordersCompleteMorethanOneDay();
+
+		return orders;
 	}
 
 	@Override

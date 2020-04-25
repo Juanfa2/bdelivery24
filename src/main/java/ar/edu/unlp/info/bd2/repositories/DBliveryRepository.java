@@ -263,5 +263,18 @@ public class DBliveryRepository{
 
         return prod;
     }
+
+    public List<Order> ordersCompleteMorethanOneDay() {
+        String queryStr = "SELECT os1.order " +
+                "FROM OrderStatus os1, OrderStatus os2 " +
+                "WHERE os1.order = os2.order AND " +
+                "os1.status = Pending AND os2.status = Delivered AND " +
+                "os1.startDate<os2.startDate";
+        Query<Order> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
+        List<Order> orders = query.getResultList();
+
+        return orders;
+
+    }
 }
 
