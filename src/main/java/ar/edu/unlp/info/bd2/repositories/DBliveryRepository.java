@@ -178,7 +178,11 @@ public class DBliveryRepository{
     }
 
     public List<User> lessDeliveryUser(){
-        String queryStr = "select o.deliveryUser from Order o where o.actualStatus.status = :sent or o.actualStatus = :delivered group by o.deliveryUser ORDER BY count(o.deliveryUser) ASC";
+        String queryStr = "select o.deliveryUser from Order o " +
+                          "where o.actualStatus.status = :sent or " +
+                                "o.actualStatus = :delivered " +
+                          "group by o.deliveryUser " +
+                          "ORDER BY count(o.deliveryUser) ASC";
         Query<User> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
         query.setParameter("delivered", "Delivered");
         query.setParameter("sent", "Sent");
@@ -229,5 +233,23 @@ public class DBliveryRepository{
         return prices;
     }
 
+    public Product getBestSellingProduct() {
+        String queryStr = "select op.producto from OrderProduct op group by op.producto ORDER BY sum(op.cuantity) DESC";
+        Query<Product> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
+        Product prod = query.setMaxResults(1).uniqueResult();
+        return prod;
+    }
+
+    public List<Order> getDeliveredOrdersSameDay() {
+        String queryStr = "select os1.order " +
+                          "from OrderStatus os1, OrderStatus os2 " +
+                          "where os1.order = os2.order " +
+                          "and os1.startDate = os2.startDate " +
+                          "and os1.status = Delivered " +
+                          "and os2.status = Pending";
+        Query<Order> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
+        List<Order> orders = query.getResultList();
+        return orders;
+    }
 }
 

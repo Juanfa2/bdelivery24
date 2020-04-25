@@ -373,7 +373,8 @@ public class DBliveryServiceImpl implements DBliveryService {
 	@Override
 	@Transactional
 	public List<Order> getDeliveredOrdersSameDay(){
-		return null;
+		List<Order> orders = repository.getDeliveredOrdersSameDay();
+		return orders;
 	}
 
 	@Override
@@ -386,7 +387,9 @@ public class DBliveryServiceImpl implements DBliveryService {
 	@Override
 	@Transactional
 	public Product getBestSellingProduct(){
-		return null;
+		Product prod = repository.getBestSellingProduct();
+
+		return prod;
 	}
 
 	@Override
