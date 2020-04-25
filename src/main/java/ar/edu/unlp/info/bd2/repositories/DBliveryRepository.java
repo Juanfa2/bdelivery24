@@ -251,5 +251,17 @@ public class DBliveryRepository{
         List<Order> orders = query.getResultList();
         return orders;
     }
+
+    public List<Product> productsSoldOn(Date day) {
+        String queryStr = "SELECT op.producto " +
+                          "FROM OrderStatus os, OrderProduct op " +
+                          "WHERE os.order = op.orderP AND " +
+                          "os.startDate = :day AND os.status = Pending ";
+        Query<Product> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
+        query.setParameter("day", day);
+        List<Product> prod = query.getResultList();
+
+        return prod;
+    }
 }
 

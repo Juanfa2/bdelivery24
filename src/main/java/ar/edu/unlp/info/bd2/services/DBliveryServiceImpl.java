@@ -420,7 +420,9 @@ public class DBliveryServiceImpl implements DBliveryService {
 	@Override
 	@Transactional
 	public List<Product> getSoldProductsOn(Date day){
-		return null;
+		List<Product> prod =  repository.productsSoldOn(day);
+
+		return prod;
 	}
 
 	@Override
