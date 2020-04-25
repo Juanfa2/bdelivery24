@@ -178,7 +178,11 @@ public class DBliveryRepository{
     }
 
     public List<User> lessDeliveryUser(){
-        String queryStr = "select o.deliveryUser from Order o where o.actualStatus.status = :sent or o.actualStatus = :delivered group by o.deliveryUser ORDER BY count(o.deliveryUser) ASC";
+        String queryStr = "select o.deliveryUser from Order o " +
+                          "where o.actualStatus.status = :sent or " +
+                                "o.actualStatus = :delivered " +
+                          "group by o.deliveryUser " +
+                          "ORDER BY count(o.deliveryUser) ASC";
         Query<User> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
         query.setParameter("delivered", "Delivered");
         query.setParameter("sent", "Sent");
@@ -229,6 +233,7 @@ public class DBliveryRepository{
         return prices;
     }
 
+/*
     public List<Order> ordersCompleteMorethanOneDay(){
         String queryStr = "from Order o  where o.actualStatus.status = :delivered and (day(o.actualStatus.startDate) - day(o.dateOfOrder)) >= 1 ";
         Query<Order> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
@@ -237,21 +242,43 @@ public class DBliveryRepository{
         return orders;
     }
 
-    public List<Order> sentMoreOneHour(){
+ */
+
+    public List<Order> sentMoreOneHour() {
         String queryStr = "from Order o  where o.actualStatus.status = :sent  ";
         Query<Order> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
         query.setParameter("sent", "Sent");
+        List<Order> order = query.getResultList();
+        return order;
+    }
+
+    public Product getBestSellingProduct(){
+        String queryStr = "select op.producto from OrderProduct op group by op.producto ORDER BY sum(op.cuantity) DESC";
+        Query<Product> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
+        Product prod = query.setMaxResults(1).uniqueResult();
+        return prod;
+    }
+
+    public List<Order> getDeliveredOrdersSameDay(){
+        String queryStr = "select os1.order " +
+                          "from OrderStatus os1, OrderStatus os2 " +
+                          "where os1.order = os2.order " +
+                          "and os1.startDate = os2.startDate " +
+                          "and os1.status = Delivered " +
+                          "and os2.status = Pending";
+        Query<Order> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
         List<Order> orders = query.getResultList();
         return orders;
     }
 
-    public List<Order> deliveredOrdersSameDay(){
+   /* public List<Order> deliveredOrdersSameDay(){
         String queryStr = "from Order o  where o.actualStatus.status = :delivered and day(o.actualStatus.startDate) = day(o.dateOfOrder)  ";
         Query<Order> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
         query.setParameter("delivered", "Delivered");
         List<Order> orders = query.getResultList();
         return orders;
     }
+    */
 
     public List<Product> productsOnePrice(){
         String queryStr = "select p.products from Price p  group by p.products having count (p.products) = 1  ";
@@ -260,11 +287,49 @@ public class DBliveryRepository{
         return products;
     }
 
+
     public List<Product> productsNotSold(){
         String queryStr = "select p from Product p  where p not in(select distinct op.producto from OrderProduct op)  ";
         Query<Product> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
         List<Product> products = query.getResultList();
         return products;
+    }
+
+
+    public List<Product> productsSoldOn(Date day) {
+        String queryStr = "SELECT op.producto " +
+                          "FROM OrderStatus os, OrderProduct op " +
+                          "WHERE os.order = op.orderP AND " +
+                          "os.startDate = :day AND os.status = Pending ";
+        Query<Product> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
+        query.setParameter("day", day);
+        List<Product> prod = query.getResultList();
+
+        return prod;
+    }
+
+    public List<Order> ordersCompleteMorethanOneDay() {
+        String queryStr = "SELECT os1.order " +
+                "FROM OrderStatus os1, OrderStatus os2 " +
+                "WHERE os1.order = os2.order AND " +
+                "os1.status = Pending AND os2.status = Delivered AND " +
+                "os1.startDate<os2.startDate";
+        Query<Order> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
+        List<Order> orders = query.getResultList();
+
+        return orders;
+
+    }
+
+    public List<Product> getProductsIncreaseMoreThan100() {
+        String queryStr = "SELECT pri.products " +
+                "FROM Price pri " +
+                "GROUP BY pri.products " +
+                "HAVING min(pri.price) * 2 < max(pri.price)";
+        Query<Product> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
+        List<Product> prod = query.getResultList();
+
+        return prod;
     }
 
 }

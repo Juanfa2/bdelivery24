@@ -308,6 +308,7 @@ public class DBliveryServiceImpl implements DBliveryService {
 		return null;
 	}
 
+	//falta
 	@Override
 	@Transactional
 	public List<Supplier> getTopNSuppliersInSentOrders(int n) {
@@ -364,6 +365,7 @@ public class DBliveryServiceImpl implements DBliveryService {
 		return orders;
 	}
 
+	//falta
 	@Override
 	@Transactional
 	public List<Order> getSentMoreOneHour(){
@@ -374,7 +376,8 @@ public class DBliveryServiceImpl implements DBliveryService {
 	@Override
 	@Transactional
 	public List<Order> getDeliveredOrdersSameDay(){
-		List<Order> orders = repository.deliveredOrdersSameDay();
+		//List<Order> orders = repository.deliveredOrdersSameDay();
+		List<Order> orders = repository.getDeliveredOrdersSameDay();
 		return orders;
 	}
 
@@ -388,7 +391,9 @@ public class DBliveryServiceImpl implements DBliveryService {
 	@Override
 	@Transactional
 	public Product getBestSellingProduct(){
-		return null;
+		Product prod = repository.getBestSellingProduct();
+
+		return prod;
 	}
 
 	@Override
@@ -396,12 +401,15 @@ public class DBliveryServiceImpl implements DBliveryService {
 	public List<Product> getProductsOnePrice(){
 		List<Product> products = repository.productsOnePrice();
 		return products;
+
+
 	}
 
 	@Override
 	@Transactional
 	public List<Product> getProductIncreaseMoreThan100(){
-		return null;
+		List<Product> prod = repository.getProductsIncreaseMoreThan100();
+		return prod;
 	}
 
 	@Override
@@ -420,16 +428,19 @@ public class DBliveryServiceImpl implements DBliveryService {
 	@Override
 	@Transactional
 	public List<Product> getSoldProductsOn(Date day){
-		return null;
+		List<Product> prod =  repository.productsSoldOn(day);
+
+		return prod;
 	}
 
 	@Override
 	@Transactional
 	public List<Order> getOrdersCompleteMorethanOneDay(){
-		List<Order> orders = repository.ordersCompleteMorethanOneDay();
+		List<Order> orders =  repository.ordersCompleteMorethanOneDay();
 		return orders;
 	}
 
+	//falta
 	@Override
 	@Transactional
 	public List<Object[]> getProductsWithPriceAt(Date day){
