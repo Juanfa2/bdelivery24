@@ -193,9 +193,13 @@ public class DBliveryRepository{
     }
 
     public List<Supplier> suppliersInSentOrders(int n){
-        String queryStr = "select o.producto.supplier from OrderProduct o where o.orderP.actualStatus.status = :sent group by o.producto.supplier ORDER BY count(*) DESC";
+        String queryStr = "SELECT o.producto.supplier " +
+                          "FROM OrderProduct o " +
+                          //"WHERE o.orderP.actualStatus.status = :sent " +
+                          "GROUP BY o.producto.supplier " +
+                          "ORDER BY count(*) DESC";
         Query<Supplier> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
-        query.setParameter("sent", "Sent");
+        //query.setParameter("sent", "Sent");
         List<Supplier> suppliers = query.setMaxResults(n).getResultList();
         return suppliers;
     }
