@@ -232,7 +232,13 @@ public class DBliveryRepository{
     }
 
     public List<Object[]> productsWithPriceAt(Date day){
-        String queryStr = "select distinct p.products, p.price FROM Price p WHERE p.startDate < :day ";
+        String queryStr = "SELECT pri.products, pri.price " +
+                          "FROM Price pri " +
+                          "WHERE (startDate,product_id,product_id) in " +
+                                 "(SELECT max(pri.startDate), pri.products  " +
+                                 "FROM Price pri " +
+                                 "WHERE pri.startDate <= :day " +
+                                 "GROUP BY pri.products)";
         Query<Object[]> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
         query.setParameter("day", day);
         List<Object[]> prices = query.getResultList();
