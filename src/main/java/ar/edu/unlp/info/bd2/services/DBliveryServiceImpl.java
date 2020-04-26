@@ -422,7 +422,9 @@ public class DBliveryServiceImpl implements DBliveryService {
 	@Override
 	@Transactional
 	public List<Supplier> getSuppliersDoNotSellOn(Date day){
-		return null;
+		List<Supplier> suppliers = repository.suppliersDoNotSellOn(day);
+		return suppliers;
+
 	}
 
 	@Override

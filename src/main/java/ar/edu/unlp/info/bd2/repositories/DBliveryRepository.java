@@ -348,5 +348,18 @@ public class DBliveryRepository{
     }
 
 
+    public List<Supplier> suppliersDoNotSellOn(Date day) {
+        String queryStr = "FROM Supplier " +
+                          "WHERE id NOT IN" +
+                               "(SELECT sup.id " +
+                                "FROM Order ord INNER JOIN ord.orderProduct op " +
+                                              "INNER JOIN op.producto prod " +
+                                              "INNER JOIN prod.supplier sup " +
+                                "WHERE ord.dateOfOrder = :day)";
+        Query<Supplier> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
+        query.setParameter("day", day);
+        List<Supplier> suppliers = query.getResultList();
+        return suppliers;
+    }
 }
 
