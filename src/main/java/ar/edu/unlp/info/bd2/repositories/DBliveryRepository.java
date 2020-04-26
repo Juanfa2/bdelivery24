@@ -180,7 +180,7 @@ public class DBliveryRepository{
     public List<User> lessDeliveryUser(){
         String queryStr = "select o.deliveryUser from Order o " +
                           "where o.actualStatus.status = :sent or " +
-                                "o.actualStatus = :delivered " +
+                                "o.actualStatus.status = :delivered " +
                           "group by o.deliveryUser " +
                           "ORDER BY count(o.deliveryUser) ASC";
         Query<User> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
