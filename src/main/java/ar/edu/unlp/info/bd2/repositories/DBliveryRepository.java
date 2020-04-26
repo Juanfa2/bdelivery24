@@ -178,11 +178,21 @@ public class DBliveryRepository{
     }
 
     public List<User> lessDeliveryUser(){
+        /*
         String queryStr = "select o.deliveryUser from Order o " +
                           "where o.actualStatus.status = :sent or " +
                                 "o.actualStatus.status = :delivered " +
                           "group by o.deliveryUser " +
                           "ORDER BY count(o.deliveryUser) ASC";
+
+         */
+        String queryStr = "SELECT dusr " +
+                          "FROM Order o INNER JOIN o.deliveryUser dusr " +
+                          "      INNER JOIN o.orderStatus os " +
+                          "WHERE os.status = :sent OR " +
+                                "os.status = :delivered " +
+                          "GROUP BY o.deliveryUser " +
+                          "ORDER BY count(o.deliveryUser) ASC, dusr.name ASC";
         Query<User> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
         query.setParameter("delivered", "Delivered");
         query.setParameter("sent", "Sent");
@@ -191,9 +201,13 @@ public class DBliveryRepository{
     }
 
     public List<Supplier> suppliersInSentOrders(int n){
-        String queryStr = "select o.producto.supplier from OrderProduct o where o.orderP.actualStatus.status = :sent group by o.producto.supplier ORDER BY count(*) DESC";
+        String queryStr = "SELECT o.producto.supplier " +
+                          "FROM OrderProduct o " +
+                          //"WHERE o.orderP.actualStatus.status = :sent " +
+                          "GROUP BY o.producto.supplier " +
+                          "ORDER BY count(*) DESC";
         Query<Supplier> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
-        query.setParameter("sent", "Sent");
+        //query.setParameter("sent", "Sent");
         List<Supplier> suppliers = query.setMaxResults(n).getResultList();
         return suppliers;
     }
@@ -226,7 +240,13 @@ public class DBliveryRepository{
     }
 
     public List<Object[]> productsWithPriceAt(Date day){
-        String queryStr = "select distinct p.products, p.price FROM Price p WHERE p.startDate < :day ";
+        String queryStr = "SELECT pri.products, pri.price " +
+                          "FROM Price pri " +
+                          "WHERE (startDate,product_id,product_id) in " +
+                                 "(SELECT max(pri.startDate), pri.products  " +
+                                 "FROM Price pri " +
+                                 "WHERE pri.startDate <= :day " +
+                                 "GROUP BY pri.products)";
         Query<Object[]> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
         query.setParameter("day", day);
         List<Object[]> prices = query.getResultList();
@@ -245,9 +265,15 @@ public class DBliveryRepository{
  */
 
     public List<Order> sentMoreOneHour() {
-        String queryStr = "from Order o  where o.actualStatus.status = :sent  ";
+        String queryStr = "select os2.order " +
+                "from OrderStatus os1, OrderStatus os2 " +
+                "where os2.order = os1.order " +
+                "and os1.status = :sent " +
+                "and os2.status = :pending " +
+                "and (day(os1.startDate) - day(os2.startDate)) >= 1 ";
         Query<Order> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
         query.setParameter("sent", "Sent");
+        query.setParameter("pending", "Pending");
         List<Order> order = query.getResultList();
         return order;
     }
@@ -332,5 +358,45 @@ public class DBliveryRepository{
         return prod;
     }
 
+    public List<Order> orderWithMoreQuantityOfProducts(Date day) {
+        String queryStr = "SELECT op.orderP " +
+                         "FROM OrderProduct op INNER JOIN op.orderP AS o " +
+                         "WHERE o.dateOfOrder = :day " +
+                         "AND op.cuantity in " +
+                                         "(SELECT MAX(cuantity) " +
+                                             "FROM OrderProduct)";
+
+        Query<Order> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
+        query.setParameter("day", day);
+        List<Order> orders = query.getResultList();
+
+        return orders;
+    }
+
+
+    public List<Supplier> suppliersDoNotSellOn(Date day) {
+        String queryStr = "FROM Supplier " +
+                          "WHERE id NOT IN" +
+                               "(SELECT sup.id " +
+                                "FROM Order ord INNER JOIN ord.orderProduct op " +
+                                              "INNER JOIN op.producto prod " +
+                                              "INNER JOIN prod.supplier sup " +
+                                "WHERE ord.dateOfOrder = :day)";
+        Query<Supplier> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
+        query.setParameter("day", day);
+        List<Supplier> suppliers = query.getResultList();
+        return suppliers;
+    }
+
+        /*
+    public List<User> usersSpendingMoreThan(Float amount){
+        String queryStr = "select o.client from OrderProduct op INNER JOIN Order o INNER JOIN Product p  group by o having sum(p.price)> :amount";
+        Query<User> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
+        query.setParameter("amount", amount);
+        List<User> users = query.getResultList();
+        return users;
+    }
+
+         */
 }
 

@@ -305,6 +305,7 @@ public class DBliveryServiceImpl implements DBliveryService {
 	@Override
 	@Transactional
 	public List<User> getUsersSpendingMoreThan(Float amount) {
+		//List<User> users = repository.usersSpendingMoreThan(amount);
 		return null;
 	}
 
@@ -422,7 +423,9 @@ public class DBliveryServiceImpl implements DBliveryService {
 	@Override
 	@Transactional
 	public List<Supplier> getSuppliersDoNotSellOn(Date day){
-		return null;
+		List<Supplier> suppliers = repository.suppliersDoNotSellOn(day);
+		return suppliers;
+
 	}
 
 	@Override
@@ -458,6 +461,8 @@ public class DBliveryServiceImpl implements DBliveryService {
 	@Override
 	@Transactional
 	public List<Order> getOrderWithMoreQuantityOfProducts(Date day){
-		return null;
+		List<Order> orders = repository.orderWithMoreQuantityOfProducts(day);
+		return orders;
+
 	}
 }
