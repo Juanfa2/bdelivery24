@@ -184,7 +184,7 @@ public class DBliveryRepository{
                           "WHERE os.status = :sent OR " +
                                 "os.status = :delivered " +
                           "GROUP BY o.deliveryUser " +
-                          "ORDER BY count(o.deliveryUser) ASC";
+                          "ORDER BY count(o.deliveryUser) ASC, dusr.name ASC";
         Query<User> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
         query.setParameter("delivered", "Delivered");
         query.setParameter("sent", "Sent");
