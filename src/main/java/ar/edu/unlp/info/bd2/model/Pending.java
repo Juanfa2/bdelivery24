@@ -48,7 +48,7 @@ public class Pending extends OrderStatus{
         this.order.setStatus(new Sent(this.order));
     }
     public void enviarOrder(Date date){
-        this.order.setStatus(new Sent(this.order));
+        this.order.setStatus(new Sent(this.order, date));
     }
     public void entregarOrder(){}
     public void entregarOrder(Date date){}

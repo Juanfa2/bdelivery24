@@ -265,15 +265,12 @@ public class DBliveryRepository{
  */
 
     public List<Order> sentMoreOneHour() {
-        String queryStr = "select os2.order " +
-                "from OrderStatus os1, OrderStatus os2 " +
-                "where os2.order = os1.order " +
-                "and os1.status = :sent " +
-                "and os2.status = :pending " +
-                "and (day(os1.startDate) - day(os2.startDate)) >= 1 ";
+        String queryStr = "SELECT os1.order " +
+                "FROM OrderStatus os1 " +
+                "WHERE " +
+                "os1.status = :sent and os1.startDate > os1.order.dateOfOrder ";
         Query<Order> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
         query.setParameter("sent", "Sent");
-        query.setParameter("pending", "Pending");
         List<Order> order = query.getResultList();
         return order;
     }
@@ -388,15 +385,17 @@ public class DBliveryRepository{
         return suppliers;
     }
 
-        /*
+
     public List<User> usersSpendingMoreThan(Float amount){
-        String queryStr = "select o.client from OrderProduct op INNER JOIN Order o INNER JOIN Product p  group by o having sum(p.price)> :amount";
+        String queryStr = "select o.orderP.client from OrderProduct o group by o.orderP having  sum(o.producto.price  * o.cuantity) > :amount";
         Query<User> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
         query.setParameter("amount", amount);
         List<User> users = query.getResultList();
         return users;
     }
 
-         */
+
+
+
 }
 

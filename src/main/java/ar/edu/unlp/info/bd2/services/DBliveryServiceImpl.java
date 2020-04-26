@@ -305,8 +305,8 @@ public class DBliveryServiceImpl implements DBliveryService {
 	@Override
 	@Transactional
 	public List<User> getUsersSpendingMoreThan(Float amount) {
-		//List<User> users = repository.usersSpendingMoreThan(amount);
-		return null;
+		List<User> users = repository.usersSpendingMoreThan(amount);
+		return users;
 	}
 
 	//falta
