@@ -178,10 +178,12 @@ public class DBliveryRepository{
     }
 
     public List<User> lessDeliveryUser(){
-        String queryStr = "select o.deliveryUser from Order o " +
-                          "where o.actualStatus.status = :sent or " +
-                                "o.actualStatus = :delivered " +
-                          "group by o.deliveryUser " +
+        String queryStr = "SELECT dusr " +
+                          "FROM Order o INNER JOIN o.deliveryUser dusr " +
+                          "      INNER JOIN o.orderStatus os " +
+                          "WHERE os.status = :sent OR " +
+                                "os.status = :delivered " +
+                          "GROUP BY o.deliveryUser " +
                           "ORDER BY count(o.deliveryUser) ASC";
         Query<User> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
         query.setParameter("delivered", "Delivered");
