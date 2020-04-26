@@ -195,4 +195,15 @@ public class Order {
 		this.setActualStatus();
 	}
 
+	public Float getAmount(){
+		//float amount = (float) 0;
+		//this.getProducts().forEach(p -> amount =+ p.getCuantity() * p.getProduct().getPrice());
+		List<OrderProduct> op = this.getProducts();
+		float sum = 0;
+		for(int i = 0; i < op.size(); i++)
+			sum += op.get(i).getCuantity() * op.get(i).getProduct().getPrice();
+		return sum;
+
+	}
+
 }
