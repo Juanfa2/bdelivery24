@@ -332,5 +332,21 @@ public class DBliveryRepository{
         return prod;
     }
 
+    public List<Order> orderWithMoreQuantityOfProducts(Date day) {
+        String queryStr = "SELECT op.orderP " +
+                         "FROM OrderProduct op INNER JOIN op.orderP AS o " +
+                         "WHERE o.dateOfOrder = :day " +
+                         "AND op.cuantity in " +
+                                         "(SELECT MAX(cuantity) " +
+                                             "FROM OrderProduct)";
+
+        Query<Order> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
+        query.setParameter("day", day);
+        List<Order> orders = query.getResultList();
+
+        return orders;
+    }
+
+
 }
 

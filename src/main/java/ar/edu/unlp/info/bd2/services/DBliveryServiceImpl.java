@@ -458,6 +458,8 @@ public class DBliveryServiceImpl implements DBliveryService {
 	@Override
 	@Transactional
 	public List<Order> getOrderWithMoreQuantityOfProducts(Date day){
-		return null;
+		List<Order> orders = repository.orderWithMoreQuantityOfProducts(day);
+		return orders;
+
 	}
 }
