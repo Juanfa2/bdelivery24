@@ -201,7 +201,7 @@ public class Order {
 		List<OrderProduct> op = this.getProducts();
 		float sum = 0;
 		for(int i = 0; i < op.size(); i++)
-			sum += op.get(i).getCuantity() * op.get(i).getProduct().getPrice();
+			sum += op.get(i).getCuantity() * (op.get(i).getProduct().getPriceAt(this.getDateOfOrder()));
 		return sum;
 
 	}

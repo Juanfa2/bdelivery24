@@ -1,10 +1,7 @@
 package ar.edu.unlp.info.bd2.model;
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+
 import ar.edu.unlp.info.bd2.config.AppConfig;
 import ar.edu.unlp.info.bd2.config.HibernateConfiguration;
 
@@ -116,5 +113,20 @@ public class Product {
 	public void updatePrice(Price price) {
 		this.setPrice(price.getPrice());
 		this.prices.add(price);
+	}
+
+	public Float getPriceAt(Date date){
+		List<Price> p = this.getPrices();
+		Date datMax = new Date(0);
+		Float price = null;
+		for(int i = 0; i < p.size(); i++) {
+			if (p.get(i).getStartDate().before(date)) {
+				if((p.get(i).getStartDate().after(datMax))){
+					datMax = p.get(i).getStartDate();
+					price = p.get(i).getPrice();
+				}
+			}
+		}
+		return price;
 	}
 }
