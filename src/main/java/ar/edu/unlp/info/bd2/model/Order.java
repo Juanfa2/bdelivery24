@@ -21,6 +21,9 @@ public class Order {
 	@Column(name="coordY")
 	private Float coordY;
 
+	@Column(name="totalAmount")
+	private Float totalAmount;
+
 	@ManyToOne
 	@JoinColumn(name="actual_status")
 	private OrderStatus actualStatus;
@@ -58,8 +61,11 @@ public class Order {
 		this.setClient(client);
 		this.setOrderStatus(new Pending(this ,dateOfOrder));
 		this.setActualStatus();
+		this.setTotalAmount(0);
 
 	}
+
+
 
 	public List<OrderStatus> getOrderStatus() {
 		return orderStatus;
@@ -92,7 +98,9 @@ public class Order {
 		this.id = id;
 	}
 
-
+	private void setTotalAmount(float amount) {
+		this.totalAmount = amount;
+	}
 
 
 	public void setDeliveryUser(User deliveryUser) {
@@ -102,6 +110,12 @@ public class Order {
 	public Date getDateOfOrder () {
 		return this.dateOfOrder;
 	}
+
+	public Float getTotalAmount () {
+		return this.totalAmount;
+	}
+
+
 	public String getAddress() {
 		return this.address;
 	}
@@ -182,6 +196,7 @@ public class Order {
 	public void sentOrder(Date date){
 		OrderStatus orderS = this.orderStatus.get(orderStatus.size()-1);
 		orderS.enviarOrder(date);
+		this.setTotalAmount(getAmount());
 		this.setActualStatus();
 	}
 	public void deliveredOrder(){

@@ -443,7 +443,7 @@ public class DBliveryServiceImpl implements DBliveryService {
 		return orders;
 	}
 
-	//falta
+	//faltagetUsersSpendingMoreThan
 	@Override
 	@Transactional
 	public List<Object[]> getProductsWithPriceAt(Date day){

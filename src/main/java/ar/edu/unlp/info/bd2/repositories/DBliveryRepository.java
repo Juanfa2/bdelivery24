@@ -387,7 +387,32 @@ public class DBliveryRepository{
 
 
     public List<User> usersSpendingMoreThan(Float amount){
-        String queryStr = "select o.orderP.client from OrderProduct o group by o.orderP having  sum(o.producto.price  * o.cuantity) > :amount";
+       /* String queryStr = "SELECT o.client " +
+                          "FROM OrderProduct op " +
+                                "INNER JOIN op.producto prod " +
+                                "INNER JOIN prod.prices pri " +
+                                "INNER JOIN op.orderP o " +
+                          "WHERE pri.startDate in (select max(startDate) from Price where product_id=3 and startDate < o.dateOfOrder group by product_id)" +
+                          "GROUP BY op.orderP " +
+                          "HAVING  sum(op.producto.price  * op.cuantity) > :amount";
+*/
+        /*String queryStr = "select distinct c " +
+        "from OrderProduct op " +
+        "inner join op.producto prod " +
+        "inner join prod.prices pri " +
+        "inner join op.orderP o " +
+        "inner join o.client c " +
+        "where pri.startDate in (select max(startDate) " +
+        "from Price " +
+        "where product_id=3 and startDate < o.dateOfOrder " +
+        "group by product_id) " +
+        "group by o.id,pri.price, op.cuantity " +
+        "having sum(pri.price*op.cuantity) >:amount";*/
+
+        String queryStr = "SELECT o.client  " +
+                          "FROM Order o " +
+                          "WHERE o.totalAmount >= :amount";
+
         Query<User> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
         query.setParameter("amount", amount);
         List<User> users = query.getResultList();
