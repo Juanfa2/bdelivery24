@@ -411,7 +411,7 @@ public class DBliveryRepository{
 
         String queryStr = "SELECT o.client  " +
                           "FROM Order o " +
-                          "WHERE o.totalAmount >= :amount";
+                          "WHERE o.totalAmount > :amount";
 
         Query<User> query = this.sessionFactory.getCurrentSession().createQuery(queryStr);
         query.setParameter("amount", amount);

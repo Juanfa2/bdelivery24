@@ -196,7 +196,7 @@ public class Order {
 	public void sentOrder(Date date){
 		OrderStatus orderS = this.orderStatus.get(orderStatus.size()-1);
 		orderS.enviarOrder(date);
-		this.setTotalAmount(getAmount());
+		this.setTotalAmount(getCurrentAmount());
 		this.setActualStatus();
 	}
 	public void deliveredOrder(){
@@ -221,5 +221,15 @@ public class Order {
 
 	}
 
+	public Float getCurrentAmount(){
+		//float amount = (float) 0;
+		//this.getProducts().forEach(p -> amount =+ p.getCuantity() * p.getProduct().getPrice());
+		List<OrderProduct> op = this.getProducts();
+		float sum = 0;
+		for(int i = 0; i < op.size(); i++)
+			sum += op.get(i).getCuantity() * (op.get(i).getProduct().getPrice());
+		return sum;
+
+	}
 
 }
