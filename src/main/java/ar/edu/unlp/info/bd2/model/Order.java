@@ -158,6 +158,7 @@ public class Order {
 
 	public void addOrderProduct(OrderProduct orderProduct) {
 		this.orderProduct.add(orderProduct);
+		this.setTotalAmount(getAmount());
 	}
 
 	public void updateOrderStatus(OrderStatus orderStatus) {
@@ -196,7 +197,6 @@ public class Order {
 	public void sentOrder(Date date){
 		OrderStatus orderS = this.orderStatus.get(orderStatus.size()-1);
 		orderS.enviarOrder(date);
-		this.setTotalAmount(getCurrentAmount());
 		this.setActualStatus();
 	}
 	public void deliveredOrder(){
