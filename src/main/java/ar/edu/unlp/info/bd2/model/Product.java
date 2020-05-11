@@ -1,10 +1,7 @@
 package ar.edu.unlp.info.bd2.model;
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+
 import ar.edu.unlp.info.bd2.config.AppConfig;
 import ar.edu.unlp.info.bd2.config.HibernateConfiguration;
 
@@ -30,7 +27,10 @@ public class Product {
 	private Float price ;
 	
 	@Column(name="weight")
-	private Float weight; 
+	private Float weight;
+
+	@Column(name= "date")
+	private Date date;
 	
 	
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -53,6 +53,22 @@ public class Product {
 		this.setWeight(weight);
 		this.setSupplier(supplier);
 		this.prices.add(new Price(this,price,startDate));
+	}
+	public Product (String name, Float price, Float weight, Supplier supplier, Date date) {
+
+		this.setName(name);
+		this.setPrice(price);
+		this.setWeight(weight);
+		this.setSupplier(supplier);
+		this.setDate(date);
+		this.prices.add(new Price(this,price,date));
+	}
+
+	public void setDate(Date date){
+		this.date = date;
+	}
+	public Date getDate(){
+		return this.date;
 	}
 
 	public void setName(String name) {
@@ -97,5 +113,20 @@ public class Product {
 	public void updatePrice(Price price) {
 		this.setPrice(price.getPrice());
 		this.prices.add(price);
+	}
+
+	public Float getPriceAt(Date date){
+		List<Price> p = this.getPrices();
+		Date datMax = new Date(0);
+		Float price = null;
+		for(int i = 0; i < p.size(); i++) {
+			if (p.get(i).getStartDate().before(date)) {
+				if((p.get(i).getStartDate().after(datMax))){
+					datMax = p.get(i).getStartDate();
+					price = p.get(i).getPrice();
+				}
+			}
+		}
+		return price;
 	}
 }
