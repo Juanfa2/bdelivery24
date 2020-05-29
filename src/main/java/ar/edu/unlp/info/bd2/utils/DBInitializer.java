@@ -1,3 +1,4 @@
+/*
 package ar.edu.unlp.info.bd2.utils;
 
 import ar.edu.unlp.info.bd2.model.*;
@@ -1880,3 +1881,4 @@ public class DBInitializer {
 
     }
 }
+*/

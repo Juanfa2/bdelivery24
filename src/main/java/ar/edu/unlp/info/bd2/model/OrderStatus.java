@@ -1,36 +1,52 @@
 package ar.edu.unlp.info.bd2.model;
-import javax.persistence.*;
+
 import java.util.Calendar;
 import java.util.Date;
+
 import java.util.Optional;
+
+import org.bson.types.ObjectId;
+
 import java.util.*;
 import ar.edu.unlp.info.bd2.config.AppConfig;
-import ar.edu.unlp.info.bd2.config.HibernateConfiguration;
+import ar.edu.unlp.info.bd2.mongo.PersistentObject;
 
+
+/*
 @Entity
 @Table(name = "orderStatus")
-public class OrderStatus {
+@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
+*/
+public abstract class OrderStatus implements PersistentObject{
 	
-	@Id
-	@GeneratedValue
-	private Long id;
 	
-	@Column(name = "status")
-	private String status;
+	protected String id;
+
 	
+	
+	protected String status;
+
+	
+	protected Date startDate;
+	
+	/*
 	@ManyToOne
 	@JoinColumn(name= "order_id")
-	private Order order;
+	*/
+	protected Order order;
 	
 	public OrderStatus() {
 		
 	}
 	
-	public OrderStatus(Order order, String status) {
+	public OrderStatus(Order order) {
+		Calendar cal = Calendar.getInstance();
 		this.setOrder(order);
-		this.setStatus(status);
 	}
-	
+
+	private void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
 	public Order getOrder() {
 		return order;
 	}
@@ -39,21 +55,23 @@ public class OrderStatus {
 		this.order = order;
 	}
 
+	abstract public String getStatus();
+	abstract void setStatus(String status);
 	
-	
-	public OrderStatus(String status) {
-		this.setStatus(status);
+	public ObjectId getObjectId() {
+		ObjectId id = new ObjectId(this.id);
+		return id;
 	}
 	
-	public void setStatus(String status) {
-		this.status = status;
+	public void setObjectId(ObjectId id) {
+		this.id = id.toString();
 	}
-	
-	public String getStatus(){
-		return this.status;
-	}
-	
-	public Long getId() {
-		return this.id;
-	}
+
+	abstract void entregarOrder();
+	abstract void cancelarOrder();
+	abstract void enviarOrder();
+	abstract void enviarOrder(Date date);
+	abstract void entregarOrder(Date date);
+	abstract void cancelarOrder(Date date);
+
 }

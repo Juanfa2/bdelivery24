@@ -1,28 +1,32 @@
 package ar.edu.unlp.info.bd2.model;
-import javax.persistence.*;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
+
+import org.bson.types.ObjectId;
+
 import java.util.*;
 import ar.edu.unlp.info.bd2.config.AppConfig;
-import ar.edu.unlp.info.bd2.config.HibernateConfiguration;
+import ar.edu.unlp.info.bd2.mongo.PersistentObject;
 
-@Entity
-@Table(name="prices")
-public class Price {
+
+
+public class Price implements PersistentObject{
 	
-	@Id
-	@GeneratedValue
-	private Long id;
 	
-	@Column(name="price")
+	private String id;
+	
+
 	private Float price;
 	
-	@Column(name="startDate")
+	
 	private Date startDate;
 	
+	/*
 	@ManyToOne
 	@JoinColumn(name="product_id")
+	*/
 	private Product products;
 	
 	
@@ -51,9 +55,15 @@ public class Price {
 		return this.startDate;
 	}
 	
-	public Long getId() {
-		return this.id;
+	public ObjectId getObjectId() {
+		ObjectId id = new ObjectId(this.id);
+		return id;
 	}
+	
+	public void setObjectId(ObjectId id) {
+		this.id = id.toString();
+	}
+	
 	public Product getProduct() {
 		return products;
 	}
@@ -61,5 +71,6 @@ public class Price {
 	public void setProduct(Product product) {
 		this.products = product;
 	}
+
 	
 }

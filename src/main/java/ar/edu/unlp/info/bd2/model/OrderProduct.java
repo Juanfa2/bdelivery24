@@ -1,6 +1,6 @@
 package ar.edu.unlp.info.bd2.model;
 
-import javax.persistence.*;
+
 
 
 
@@ -9,26 +9,32 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
+import org.bson.types.ObjectId;
+
 import ar.edu.unlp.info.bd2.config.AppConfig;
-import ar.edu.unlp.info.bd2.config.HibernateConfiguration;
+import ar.edu.unlp.info.bd2.mongo.PersistentObject;
 
-@Entity
-@Table(name = "order_product")
-public class OrderProduct {
 
-	@Id
-	@GeneratedValue
-	private Long id;
+
+public class OrderProduct implements PersistentObject{
+
 	
-	@Column(name = "cuantity")
+	private String id;
+	
+	
 	private Long cuantity;
 	
+	/*
 	@ManyToOne
 	@JoinColumn(name="product_id")
+	*/
 	private Product producto;
 	
+	/*
 	@ManyToOne
 	@JoinColumn(name="order_id")
+	*/
 	private Order orderP;
 	
 	public OrderProduct() {
@@ -41,12 +47,13 @@ public class OrderProduct {
 		this.setProduct(product);
 	}
 
-	public Long getId() {
+	public ObjectId getObjectId() {
+		ObjectId id = new ObjectId(this.id);
 		return id;
 	}
-
-	public void setId(Long id) {
-		this.id = id;
+	
+	public void setObjectId(ObjectId id) {
+		this.id = id.toString();
 	}
 
 	public Long getCuantity() {
@@ -72,6 +79,7 @@ public class OrderProduct {
 	public void setOrder(Order order) {
 		this.orderP = order;
 	}
+
 	
 	
 }

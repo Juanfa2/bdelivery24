@@ -1,38 +1,43 @@
 package ar.edu.unlp.info.bd2.model;
-import javax.persistence.*;
+
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import ar.edu.unlp.info.bd2.config.AppConfig;
-import ar.edu.unlp.info.bd2.config.HibernateConfiguration;
 
-@Entity
-@Table(name="suppliers")
-public class Supplier {
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
+
+import ar.edu.unlp.info.bd2.config.AppConfig;
+import ar.edu.unlp.info.bd2.mongo.PersistentObject;
+
+
+
+public class Supplier implements PersistentObject{
 	
 	@Id
-	@GeneratedValue
-	private Long id;
+	private String id;
 	
-	@Column(name="name")
+	
 	private String name;
 	
-	@Column(name="cuil")
+	
 	private String cuil;
 	
-	@Column(name="address")
+	
 	private String address;
 	
-	@Column(name="coordX")
+	
 	private Float coordX;
 	
-	@Column(name="coordY")
+	
 	private Float coordY;
 	
+	/*
 	@OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	*/
 	private List<Product> products = new ArrayList<>();
 
 	public Supplier() {		
@@ -62,8 +67,13 @@ public class Supplier {
 		this.coordY = coordY;
 	}
 	
-	public Long getId() {
-		return this.id; 
+	public ObjectId getObjectId() {
+		ObjectId id = new ObjectId(this.id);
+		return id;
+	}
+	
+	public void setObjectId(ObjectId id) {
+		this.id = id.toString();
 	}
 	public String getName() {
 		return this.name;
@@ -80,4 +90,5 @@ public class Supplier {
 	public Float getCoordY() {
 		return this.coordY;
 	}
+
 }

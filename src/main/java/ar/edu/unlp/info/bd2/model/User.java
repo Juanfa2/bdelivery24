@@ -1,33 +1,42 @@
 package ar.edu.unlp.info.bd2.model;
-import javax.persistence.*;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
+
+import org.bson.codecs.pojo.annotations.*;
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
+
+
+
+import ar.edu.unlp.info.bd2.config.MongoDBConfiguration;
+
+
 import ar.edu.unlp.info.bd2.config.AppConfig;
-import ar.edu.unlp.info.bd2.config.HibernateConfiguration;
+import ar.edu.unlp.info.bd2.mongo.PersistentObject;
 
 
-@Entity
-@Table(name="users")
-public class User {
+
+
+public class User implements PersistentObject{
 	
-	@Id
-	@GeneratedValue
-	private Long id;
 	
-	@Column(name="username")
+	private String id;
+	
+	
 	private String username;
 	
-	@Column(name="name")
+	
 	private String name;
 	
-	@Column(name="password")
+	
 	private String password;
 	
-	@Column(name="email")
+	
 	private String email;
 	
-	@Column(name="dateOfBirth")
+	
 	private Date dateOfBirth;
 	
 	public User() {
@@ -41,6 +50,8 @@ public class User {
 		this.setName(name);
 		this.setDateOfBirth(dateOfBirth);
 	}
+	
+
 	
 	public void setUsername(String username) {
 		this.username = username;
@@ -74,8 +85,13 @@ public class User {
 		return this.dateOfBirth;
 	}
 	
-	public Long getId() {
-		return this.id;
+	public ObjectId getObjectId() {
+		ObjectId id = new ObjectId(this.id);
+		return id;
+	}
+	
+	public void setObjectId(ObjectId id) {
+		this.id = id.toString();
 	}
 	
 	
