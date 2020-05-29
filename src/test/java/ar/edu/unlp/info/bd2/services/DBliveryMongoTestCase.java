@@ -39,7 +39,7 @@ public class DBliveryMongoTestCase {
     }
 
     private Integer getGroupNumber() {
-        return 0;
+        return 24;
     }
 
     @Test

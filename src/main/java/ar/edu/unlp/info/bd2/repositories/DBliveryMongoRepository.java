@@ -32,7 +32,7 @@ public class DBliveryMongoRepository {
         return this.client.getDatabase("bd2_grupo" + this.getGroupNumber() );
     }
 
-    private Integer getGroupNumber() { return 0; }
+    private Integer getGroupNumber() { return 24; }
 
     public <T extends PersistentObject> List<T> getAssociatedObjects(
             PersistentObject source, Class<T> objectClass, String association, String destCollection) {
