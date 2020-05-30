@@ -12,7 +12,7 @@ import org.bson.codecs.pojo.annotations.*;
 
 public class Product implements PersistentObject{
 	
-	@Id
+	@BsonId
 	private String id;
 	
 	
@@ -21,7 +21,7 @@ public class Product implements PersistentObject{
 	/*
 	@OneToMany(mappedBy = "products", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	*/
-	
+	//@BsonIgnore
 	private List<Price> prices = new ArrayList<>();
 	
 	
@@ -55,21 +55,23 @@ public class Product implements PersistentObject{
 	public Product (String name, Float price, Float weight, Supplier supplier) {
 		Calendar cal = Calendar.getInstance();
 		Date startDate = cal.getTime();
-
+		ObjectId id = new ObjectId();
 		this.setName(name);
 		this.setPrice(price);
 		this.setWeight(weight);
 		this.setSupplier(supplier);
-		this.prices.add(new Price(this,price,startDate));
+		this.setObjectId(id);
+		this.prices.add(new Price(price,startDate));
 	}
 	public Product (String name, Float price, Float weight, Supplier supplier, Date date) {
-
+		ObjectId id = new ObjectId();
+		this.setObjectId(id);
 		this.setName(name);
 		this.setPrice(price);
 		this.setWeight(weight);
 		this.setSupplier(supplier);
 		this.setDate(date);
-		this.prices.add(new Price(this,price,date));
+		this.prices.add(new Price(price,date));
 	}
 
 	public void setDate(Date date){
@@ -101,6 +103,7 @@ public class Product implements PersistentObject{
 	public List<Price> getPrices(){
 		return this.prices;
 	}
+	
 	
 	public Float getWeight() {
 		return this.weight;

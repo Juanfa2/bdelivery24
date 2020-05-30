@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.bson.codecs.pojo.annotations.BsonId;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 
@@ -17,7 +18,7 @@ import ar.edu.unlp.info.bd2.mongo.PersistentObject;
 
 public class Supplier implements PersistentObject{
 	
-	@Id
+	@BsonId
 	private String id;
 	
 	
@@ -44,6 +45,8 @@ public class Supplier implements PersistentObject{
 	}
 	
 	public Supplier(String name, String cuil, String address, Float coordX, Float coordY) {
+		ObjectId id = new ObjectId();
+		this.setObjectId(id);
 		this.setName(name);
 		this.setCuil(cuil);
 		this.setAddress(address);

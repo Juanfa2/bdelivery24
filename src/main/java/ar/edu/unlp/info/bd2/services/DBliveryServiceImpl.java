@@ -1,10 +1,11 @@
 package ar.edu.unlp.info.bd2.services;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-
+import org.bson.Document;
 import org.bson.types.ObjectId;
 
 import ar.edu.unlp.info.bd2.model.Order;
@@ -29,22 +30,25 @@ public class DBliveryServiceImpl implements DBliveryService{
 	@Override
 	public Product createProduct(String name, Float price, Float weight, Supplier supplier) {
 		Product product = new Product(name, price,weight, supplier);
-		ObjectId id = this.repository.createProduct(product);
+		Product newProduct = this.repository.createProduct(product);
+		
+		
+		return newProduct;
+	}
+
+	@Override
+	public Product createProduct(String name, Float price, Float weight, Supplier supplier, Date date) {
+		Product product = new Product(name, price,weight, supplier, date);
+		ObjectId id = this.repository.createProductWithDate(product);
 		product.setObjectId(id);
 		return product;
 	}
 
 	@Override
-	public Product createProduct(String name, Float price, Float weight, Supplier supplier, Date date) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Supplier createSupplier(String name, String cuil, String address, Float coordX, Float coordY) {
 		Supplier supplier = new Supplier(name, cuil, address, coordX, coordY );
-		ObjectId id = this.repository.createSupplier(supplier);
-		supplier.setObjectId(id);
+		this.repository.createSupplier(supplier);
+		
 		return supplier;
 	}
 
@@ -58,8 +62,14 @@ public class DBliveryServiceImpl implements DBliveryService{
 
 	@Override
 	public Product updateProductPrice(ObjectId id, Float price, Date startDate) throws DBliveryException {
-		// TODO Auto-generated method stub
-		return null;
+		Product product = this.repository.findProductById(id);
+		//Document supplier = (Document) product.get("Supplier");
+
+		Price newPrice = new Price(price, startDate);
+		product.updatePrice(newPrice);
+		this.repository.updateProductPrice(id,newPrice);	
+
+		return product;
 	}
 
 	@Override
@@ -82,14 +92,15 @@ public class DBliveryServiceImpl implements DBliveryService{
 
 	@Override
 	public Optional<Order> getOrderById(ObjectId id) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	@Override
 	public Order createOrder(Date dateOfOrder, String address, Float coordX, Float coordY, User client) {
-		// TODO Auto-generated method stub
-		return null;
+		Order order = new Order(dateOfOrder, address, coordX, coordY, client);
+		Order newOrder = this.repository.createOrder(order);
+		return newOrder;
 	}
 
 	@Override

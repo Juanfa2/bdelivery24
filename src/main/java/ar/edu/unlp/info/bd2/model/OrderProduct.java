@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.bson.codecs.pojo.annotations.BsonId;
 import org.bson.types.ObjectId;
 
 import ar.edu.unlp.info.bd2.config.AppConfig;
@@ -19,7 +20,7 @@ import ar.edu.unlp.info.bd2.mongo.PersistentObject;
 
 public class OrderProduct implements PersistentObject{
 
-	
+	@BsonId
 	private String id;
 	
 	

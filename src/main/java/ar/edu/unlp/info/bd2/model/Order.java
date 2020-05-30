@@ -3,6 +3,7 @@ package ar.edu.unlp.info.bd2.model;
 
 import java.util.*;
 
+import org.bson.codecs.pojo.annotations.BsonId;
 import org.bson.types.ObjectId;
 
 import ar.edu.unlp.info.bd2.config.AppConfig;
@@ -43,6 +44,7 @@ public class Order implements PersistentObject{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	*/
+	@BsonId
 	private String id;
 
 	/*
@@ -67,6 +69,8 @@ public class Order implements PersistentObject{
 
 	}
 	public Order(Date dateOfOrder, String address, Float coordX, Float coordY, User client ) {
+		ObjectId id = new ObjectId();
+		this.setObjectId(id);
 		this.setdateOfOrder(dateOfOrder);
 		this.setAddress(address);
 		this.setCoordX(coordX);

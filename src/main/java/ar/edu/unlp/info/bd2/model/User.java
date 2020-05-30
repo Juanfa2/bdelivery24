@@ -21,7 +21,7 @@ import ar.edu.unlp.info.bd2.mongo.PersistentObject;
 
 public class User implements PersistentObject{
 	
-	
+	@BsonId
 	private String id;
 	
 	

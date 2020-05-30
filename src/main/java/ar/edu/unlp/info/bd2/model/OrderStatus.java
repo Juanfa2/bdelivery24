@@ -5,6 +5,8 @@ import java.util.Date;
 
 import java.util.Optional;
 
+import org.bson.codecs.pojo.annotations.BsonDiscriminator;
+import org.bson.codecs.pojo.annotations.BsonId;
 import org.bson.types.ObjectId;
 
 import java.util.*;
@@ -17,9 +19,10 @@ import ar.edu.unlp.info.bd2.mongo.PersistentObject;
 @Table(name = "orderStatus")
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 */
+@BsonDiscriminator
 public abstract class OrderStatus implements PersistentObject{
 	
-	
+	@BsonId
 	protected String id;
 
 	
