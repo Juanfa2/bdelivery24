@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.bson.codecs.pojo.annotations.BsonId;
+import org.bson.codecs.pojo.annotations.BsonIgnore;
 import org.bson.types.ObjectId;
 
 import ar.edu.unlp.info.bd2.config.AppConfig;
@@ -18,44 +19,25 @@ import ar.edu.unlp.info.bd2.mongo.PersistentObject;
 
 
 
-public class OrderProduct implements PersistentObject{
+public class OrderProduct {
 
-	@BsonId
-	private String id;
-	
-	
 	private Long cuantity;
 	
-	/*
-	@ManyToOne
-	@JoinColumn(name="product_id")
-	*/
 	private Product producto;
 	
-	/*
-	@ManyToOne
-	@JoinColumn(name="order_id")
-	*/
+	
+	@BsonIgnore
 	private Order orderP;
 	
 	public OrderProduct() {
 		
 	}
 	
-	public OrderProduct(Order order, Long cuantity, Product product) {
-		this.setOrder(order);
+	public OrderProduct(Long cuantity, Product product) {
 		this.setCuantity(cuantity);
 		this.setProduct(product);
 	}
 
-	public ObjectId getObjectId() {
-		ObjectId id = new ObjectId(this.id);
-		return id;
-	}
-	
-	public void setObjectId(ObjectId id) {
-		this.id = id.toString();
-	}
 
 	public Long getCuantity() {
 		return cuantity;

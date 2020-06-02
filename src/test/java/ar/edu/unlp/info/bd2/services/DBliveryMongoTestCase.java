@@ -90,6 +90,7 @@ public class DBliveryMongoTestCase {
         Date dob = cal.getTime();
         User u1 = this.service.createUser("hugo.gamarra@testmail.com", "123456", "hgamarra", "Hugo Gamarra", dob);
         Order o1 = this.service.createOrder(orderDate,"Av. Corrientes 1405 2° B", Float.valueOf(-54.45F), Float.valueOf(-62.22F),u1);
+        
         Order o2 = this.service.addProduct(o1.getObjectId(), 1L, p1);
         Optional<Order> o3 = this.service.getOrderById(o2.getObjectId());
         if (!o3.isPresent()) {
@@ -100,6 +101,7 @@ public class DBliveryMongoTestCase {
         assertEquals(1,ord.getStatus().size());
         assertEquals(u1.getObjectId(),ord.getClient().getObjectId());
         assertEquals(1,ord.getProducts().size());
+        
     }
 
     @Test

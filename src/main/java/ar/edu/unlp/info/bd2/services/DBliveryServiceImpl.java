@@ -8,13 +8,10 @@ import java.util.Optional;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
-import ar.edu.unlp.info.bd2.model.Order;
-import ar.edu.unlp.info.bd2.model.OrderStatus;
-import ar.edu.unlp.info.bd2.model.Product;
-import ar.edu.unlp.info.bd2.model.Supplier;
-import ar.edu.unlp.info.bd2.model.User;
-import ar.edu.unlp.info.bd2.model.OrderStatus;
-import ar.edu.unlp.info.bd2.model.Price;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCursor;
+
+import ar.edu.unlp.info.bd2.model.*;
 import ar.edu.unlp.info.bd2.repositories.DBliveryException;
 import ar.edu.unlp.info.bd2.repositories.DBliveryMongoRepository;
 
@@ -30,17 +27,14 @@ public class DBliveryServiceImpl implements DBliveryService{
 	@Override
 	public Product createProduct(String name, Float price, Float weight, Supplier supplier) {
 		Product product = new Product(name, price,weight, supplier);
-		Product newProduct = this.repository.createProduct(product);
-		
-		
-		return newProduct;
+		this.repository.createProduct(product);
+		return product;
 	}
 
 	@Override
 	public Product createProduct(String name, Float price, Float weight, Supplier supplier, Date date) {
 		Product product = new Product(name, price,weight, supplier, date);
-		ObjectId id = this.repository.createProductWithDate(product);
-		product.setObjectId(id);
+		this.repository.createProductWithDate(product);
 		return product;
 	}
 
@@ -55,64 +49,72 @@ public class DBliveryServiceImpl implements DBliveryService{
 	@Override
 	public User createUser(String email, String password, String username, String name, Date dateOfBirth) {
 		User user = new User(email, password, username, name, dateOfBirth);
-		ObjectId id = this.repository.createUser(user);
-		user.setObjectId(id);
+		this.repository.createUser(user);
 		return user;
 	}
 
 	@Override
 	public Product updateProductPrice(ObjectId id, Float price, Date startDate) throws DBliveryException {
 		Product product = this.repository.findProductById(id);
-		//Document supplier = (Document) product.get("Supplier");
-
 		Price newPrice = new Price(price, startDate);
 		product.updatePrice(newPrice);
-		this.repository.updateProductPrice(id,newPrice);	
-
+		this.repository.updateProductPrice(product, id);	
 		return product;
 	}
 
 	@Override
 	public Optional<User> getUserById(ObjectId id) {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<User> user = this.repository.getUserById(id);
+		return user;
 	}
 
 	@Override
 	public Optional<User> getUserByEmail(String email) {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<User> user = this.repository.getUserByEmail(email);
+		return user;
 	}
 
 	@Override
 	public Optional<User> getUserByUsername(String username) {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<User> user = this.repository.getUserByUsername(username);
+		return user;
 	}
 
 	@Override
 	public Optional<Order> getOrderById(ObjectId id) {
-		
-		return null;
+		Optional<Order> order = this.repository.getOrderById(id);
+		return order;
 	}
 
 	@Override
 	public Order createOrder(Date dateOfOrder, String address, Float coordX, Float coordY, User client) {
 		Order order = new Order(dateOfOrder, address, coordX, coordY, client);
-		Order newOrder = this.repository.createOrder(order);
-		return newOrder;
+		this.repository.createOrder(order);
+		return order;
 	}
 
 	@Override
 	public Order addProduct(ObjectId order, Long quantity, Product product) throws DBliveryException {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<Order> oldOrder = this.repository.getOrderById(order);
+		Order newOrder = oldOrder.get();
+		OrderProduct orderProduct = new OrderProduct(quantity, product);
+		newOrder.addOrderProduct(orderProduct);
+		this.repository.updateOrder(newOrder, order);
+		return newOrder;
 	}
 
 	@Override
 	public Order deliverOrder(ObjectId order, User deliveryUser) throws DBliveryException {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<Order> oldOrder = this.repository.getOrderById(order);
+		Order newOrder = oldOrder.get();
+		if(newOrder.getActualStatus().equals("Pending") && newOrder.getProducts().size() > 0){
+			newOrder.setDeliveryUser(deliveryUser);
+			newOrder.sentOrder();
+			this.repository.updateOrder(newOrder,order);
+			return newOrder;
+		}else {
+			throw new DBliveryException("The order can't be delivered");
+		}
 	}
 
 	@Override
@@ -123,8 +125,15 @@ public class DBliveryServiceImpl implements DBliveryService{
 
 	@Override
 	public Order cancelOrder(ObjectId order) throws DBliveryException {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<Order> oldOrder = this.repository.getOrderById(order);
+		Order newOrder = oldOrder.get();
+		if(newOrder.getActualStatus().equals("Pending")){
+			newOrder.cancelOrder();
+			this.repository.updateOrder(newOrder,order);
+			return newOrder;
+		}else {
+			throw new DBliveryException("The order can't be cancelled");
+		}
 	}
 
 	@Override
@@ -135,8 +144,15 @@ public class DBliveryServiceImpl implements DBliveryService{
 
 	@Override
 	public Order finishOrder(ObjectId order) throws DBliveryException {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<Order> oldOrder = this.repository.getOrderById(order);
+		Order newOrder = oldOrder.get();
+		if(newOrder.getActualStatus().equals("Sent")){
+			newOrder.deliveredOrder();
+			this.repository.updateOrder(newOrder,order);
+			return newOrder;
+		}else {
+			throw new DBliveryException("The order can't be finished");
+		}
 	}
 
 	@Override
@@ -147,32 +163,56 @@ public class DBliveryServiceImpl implements DBliveryService{
 
 	@Override
 	public boolean canCancel(ObjectId order) throws DBliveryException {
-		// TODO Auto-generated method stub
-		return false;
+		Optional<Order> oldOrder = this.repository.getOrderById(order);
+		Order newOrder = oldOrder.get();
+		if(newOrder.getActualStatus().equals("Pending") ) {
+			return true;
+		}else {
+			return false;
+		}
 	}
 
 	@Override
 	public boolean canFinish(ObjectId id) throws DBliveryException {
-		// TODO Auto-generated method stub
-		return false;
+		Optional<Order> oldOrder = this.repository.getOrderById(id);
+		Order newOrder = oldOrder.get();
+		if(newOrder.getActualStatus().equals("Sent") ) {
+			return true;
+		}else {
+			return false;
+		}
 	}
 
 	@Override
 	public boolean canDeliver(ObjectId order) throws DBliveryException {
-		// TODO Auto-generated method stub
-		return false;
+		Optional<Order> oldOrder = this.repository.getOrderById(order);
+		Order newOrder = oldOrder.get();
+		if(newOrder.getActualStatus().equals("Pending")  && newOrder.getProducts().size() > 0) {
+			return true;
+		}else {
+			return false;
+		}
+		
 	}
 
 	@Override
 	public OrderStatus getActualStatus(ObjectId order) {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<Order> oldOrder = this.repository.getOrderById(order);
+		Order newOrder = oldOrder.get();
+		List<OrderStatus> or = newOrder.getStatus();
+		OrderStatus actualStatus = or.get(or.size()-1);
+		return actualStatus;
 	}
 
 	@Override
 	public List<Product> getProductsByName(String name) {
-		// TODO Auto-generated method stub
-		return null;
+		FindIterable<Product>  products = this.repository.getProductsByName(name);
+		List<Product> productos = new ArrayList<>();
+		MongoCursor<Product> prod = products.iterator();
+		while(prod.hasNext()) {
+			productos.add(prod.next());
+		}
+		return productos;
 	}
 
 	

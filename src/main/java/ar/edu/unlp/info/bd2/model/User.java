@@ -22,21 +22,12 @@ import ar.edu.unlp.info.bd2.mongo.PersistentObject;
 public class User implements PersistentObject{
 	
 	@BsonId
-	private String id;
-	
-	
+	private ObjectId objectId;
+
 	private String username;
-	
-	
 	private String name;
-	
-	
 	private String password;
-	
-	
 	private String email;
-	
-	
 	private Date dateOfBirth;
 	
 	public User() {
@@ -86,12 +77,11 @@ public class User implements PersistentObject{
 	}
 	
 	public ObjectId getObjectId() {
-		ObjectId id = new ObjectId(this.id);
-		return id;
+		return this.objectId;
 	}
 	
 	public void setObjectId(ObjectId id) {
-		this.id = id.toString();
+		this.objectId = id;
 	}
 	
 	

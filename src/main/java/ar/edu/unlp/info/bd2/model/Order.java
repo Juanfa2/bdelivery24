@@ -3,138 +3,96 @@ package ar.edu.unlp.info.bd2.model;
 
 import java.util.*;
 
-import org.bson.codecs.pojo.annotations.BsonId;
+
 import org.bson.types.ObjectId;
 
 import ar.edu.unlp.info.bd2.config.AppConfig;
 import ar.edu.unlp.info.bd2.mongo.PersistentObject;
+import org.bson.codecs.pojo.annotations.*;
 
 
 
 public class Order implements PersistentObject{
 
-	
-	private Date dateOfOrder;
-
-	
-	private String address;
-
-	
-	private Float coordX;
-
-	
-	private Float coordY;
-
-	
-	private Float totalAmount;
-	
-	/*
-	@ManyToOne
-	@JoinColumn(name="actual_status")*/
-	
-	private OrderStatus actualStatus;
-
-	/*
-	@ManyToOne
-	@JoinColumn(name="client_id")
-	*/
-	private User client;
-
-	/*
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	*/
 	@BsonId
-	private String id;
+	private ObjectId objectId;
+	private Date dateOfOrder;
+	private String address;
+	private Float coordX;
+	private Float coordY;
+	private Float totalAmount;
 
-	/*
-	@ManyToOne
-	@JoinColumn(name="delivery_id")
-	*/
 	
+	private String actualStatus;
+	
+	
+	private User client;
 	private User deliveryUser;
+	 
+	
+	private List<OrderProduct> products = new ArrayList<>();
 
-	/*
-	@OneToMany( mappedBy = "orderP", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	*/
-	private List<OrderProduct> orderProduct = new ArrayList<>();
-
-	/*
-	@OneToMany( targetEntity = OrderStatus.class, mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	*/
-	private List<OrderStatus> orderStatus = new ArrayList<>();
+	
+	private List<OrderStatus> status = new ArrayList<>();
 
 
 	public Order() {
 
 	}
 	public Order(Date dateOfOrder, String address, Float coordX, Float coordY, User client ) {
-		ObjectId id = new ObjectId();
-		this.setObjectId(id);
-		this.setdateOfOrder(dateOfOrder);
+		this.setDateOfOrder(dateOfOrder);
 		this.setAddress(address);
 		this.setCoordX(coordX);
 		this.setCoordY(coordY);
-		this.setClient(client);
-		this.setOrderStatus(new Pending(this ,dateOfOrder));
-		this.setActualStatus();
 		this.setTotalAmount(0);
+		this.setClient(client);
+		this.status.add(new Pending(dateOfOrder));
+		this.setStatus(this.status);
+		OrderStatus status = this.status.get(this.status.size()-1);
+		this.setActualStatus(status.getStatus());
+		
 
 	}
 
-
-
-	public List<OrderStatus> getOrderStatus() {
-		return orderStatus;
+	/* Object Id*/
+	public ObjectId getObjectId() {
+		return this.objectId;
 	}
-	public void setOrderStatus(OrderStatus orderStatus) {
-		this.orderStatus.add(orderStatus);
+	
+	public void setObjectId(ObjectId id) {
+		this.objectId = id;
 	}
-	public void setdateOfOrder(Date dateOfOrder) {
-		this.dateOfOrder = dateOfOrder;
+	
+	
+	
+	/* Order Status */
+	
+	
+	public void addStatus(OrderStatus orderStatus) {
+		this.status.add(orderStatus);
+		this.setActualStatus(orderStatus.getStatus());
 	}
-	public void setAddress(String address) {
-		this.address = address;
+	
+	public void setStatus(List<OrderStatus> orderStatus) {
+		this.status = orderStatus;
 	}
-	public void setCoordX(Float coordX) {
-		this.coordX = coordX;
-	}
-	public void setCoordY(Float coordY) {
-		this.coordY = coordY;
-	}
-	public void setClient(User client) {
-		this.client = client;
-	}
-
-
-
-	public void setDateOfOrder(Date dateOfOrder) {
-		this.dateOfOrder = dateOfOrder;
+	
+	public List<OrderStatus>  getStatus () {
+		return status;
 	}
 	
 
-	private void setTotalAmount(float amount) {
-		this.totalAmount = amount;
+	/* Address */
+	public void setAddress(String address) {
+		this.address = address;
 	}
-
-
-	public void setDeliveryUser(User deliveryUser) {
-		this.deliveryUser = deliveryUser;
-	}
-
-	public Date getDateOfOrder () {
-		return this.dateOfOrder;
-	}
-
-	public Float getTotalAmount () {
-		return this.totalAmount;
-	}
-
-
+	
 	public String getAddress() {
 		return this.address;
 	}
-
+	
+	/* Coord */
+	
 	public Float getCoordX () {
 		return this.coordX;
 	}
@@ -142,91 +100,127 @@ public class Order implements PersistentObject{
 	public Float getCoordY() {
 		return this.coordY;
 	}
-
+	
+	public void setCoordX(Float coordX) {
+		this.coordX = coordX;
+	}
+	public void setCoordY(Float coordY) {
+		this.coordY = coordY;
+	}
+	
+	/* Client */
+	
+	public void setClient(User client) {
+		this.client = client;
+	}
+	
 	public User getClient () {
 		return this.client;
 	}
-
 	
-	public List<OrderStatus>  getStatus () {
-		return this.orderStatus;
+
+
+	/*Date of Order */
+	public void setDateOfOrder(Date dateOfOrder) {
+		this.dateOfOrder = dateOfOrder;
+	}
+	
+	public Date getDateOfOrder () {
+		return this.dateOfOrder;
+	}
+
+	/* TotalAmount */
+	
+	private void setTotalAmount(float amount) {
+		this.totalAmount = amount;
+	}
+	
+	public Float getTotalAmount () {
+		return this.totalAmount;
+	}
+	
+
+	/* Delivery User */
+	
+	public void setDeliveryUser(User deliveryUser) {
+		this.deliveryUser = deliveryUser;
 	}
 
 	public User getDeliveryUser() {
 		return this.deliveryUser;
 	}
 
-
-	public List<OrderProduct> getProducts() {
-		return orderProduct;
-	}
-
-
-	public List<OrderProduct> getOrderProduct() {
-		return orderProduct;
-	}
-	public void setOrderProduct(List<OrderProduct> orderProduct) {
-		this.orderProduct = orderProduct;
-	}
-
-	public void addOrderProduct(OrderProduct orderProduct) {
-		this.orderProduct.add(orderProduct);
-		this.setTotalAmount(getAmount());
-	}
-
-	public void updateOrderStatus(OrderStatus orderStatus) {
-		this.orderStatus.add(orderStatus);
-	}
-	public void setStatus(OrderStatus orderStatus){
-		this.orderStatus.add(orderStatus);
-	}
-
-	public void setActualStatus(){
-		this.actualStatus = this.orderStatus.get(orderStatus.size()-1);
-
-	}
-
-	public OrderStatus getActualStatus(){
+	public String getActualStatus(){
 		return this.actualStatus;
 	}
-
-
-	public void cancelOrder(){
-		OrderStatus orderS = this.orderStatus.get(orderStatus.size()-1);
-		orderS.cancelarOrder();
-		this.setActualStatus();
+	public void setActualStatus(String actualStatus) {
+		this.actualStatus = actualStatus;
 	}
+	
+	
+	
+	/*Order Product */
+
+	
+	public void setProducts(List<OrderProduct> orderProduct) {
+		this.products = orderProduct;
+	}
+	
+	
+	public List<OrderProduct> getProducts() {
+		return products;
+	}
+
+	
+
+	public void addOrderProduct(OrderProduct orderProduct) {
+		this.products.add(orderProduct);
+		//this.setTotalAmount(getAmount());
+	}
+	
+
+	
+	public void cancelOrder(){
+		OrderStatus orderS = new Cancelled();
+		this.addStatus(orderS);
+	}
+	
+	/*
 	public void cancelOrder(Date date){
 		OrderStatus orderS = this.orderStatus.get(orderStatus.size()-1);
 		orderS.cancelarOrder(date);
 		this.setActualStatus();
 	}
+	*/
 
 	public void sentOrder(){
-		OrderStatus orderS = this.orderStatus.get(orderStatus.size()-1);
-		orderS.enviarOrder();
-		this.setActualStatus();
+		OrderStatus orderS = new Sent();
+		this.addStatus(orderS);
 	}
+	/*
 	public void sentOrder(Date date){
 		OrderStatus orderS = this.orderStatus.get(orderStatus.size()-1);
 		orderS.enviarOrder(date);
 		this.setActualStatus();
 	}
+	*/
 	public void deliveredOrder(){
-		OrderStatus orderS = this.orderStatus.get(orderStatus.size()-1);
-		orderS.entregarOrder();
-		this.setActualStatus();
+		OrderStatus orderS = new Delivered();
+		this.addStatus(orderS);
 	}
+	
+	/*
 	public void deliveredOrder(Date date){
 		OrderStatus orderS = this.orderStatus.get(orderStatus.size()-1);
 		orderS.entregarOrder(date);
 		this.setActualStatus();
 	}
 
+	/*
 	public Float getAmount(){
 		//float amount = (float) 0;
 		//this.getProducts().forEach(p -> amount =+ p.getCuantity() * p.getProduct().getPrice());
-		List<OrderProduct> op = this.getProducts();
+		List<OrderProduct> op = this.getOrderProduct();
 		float sum = 0;
 		for(int i = 0; i < op.size(); i++)
 			sum += op.get(i).getCuantity() * (op.get(i).getProduct().getPriceAt(this.getDateOfOrder()));
@@ -237,7 +231,7 @@ public class Order implements PersistentObject{
 	public Float getCurrentAmount(){
 		//float amount = (float) 0;
 		//this.getProducts().forEach(p -> amount =+ p.getCuantity() * p.getProduct().getPrice());
-		List<OrderProduct> op = this.getProducts();
+		List<OrderProduct> op = this.getOrderProduct();
 		float sum = 0;
 		for(int i = 0; i < op.size(); i++)
 			sum += op.get(i).getCuantity() * (op.get(i).getProduct().getPrice());
@@ -245,13 +239,15 @@ public class Order implements PersistentObject{
 
 	}
 	
-	public ObjectId getObjectId() {
-		ObjectId id = new ObjectId(this.id);
-		return id;
+	public void setTotalAmount(Float totalAmount) {
+		this.totalAmount = totalAmount;
 	}
+	public void setOrderStatus(List<OrderStatus> orderStatus) {
+		this.orderStatus = orderStatus;
+	}
+	}
+	*/
 	
-	public void setObjectId(ObjectId id) {
-		this.id = id.toString();
-	}
+	
 
 }

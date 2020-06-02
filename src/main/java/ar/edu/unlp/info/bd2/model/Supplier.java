@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.bson.codecs.pojo.annotations.BsonId;
+import org.bson.codecs.pojo.annotations.BsonIgnore;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 
@@ -19,34 +20,21 @@ import ar.edu.unlp.info.bd2.mongo.PersistentObject;
 public class Supplier implements PersistentObject{
 	
 	@BsonId
-	private String id;
-	
+	private ObjectId objectId;
 	
 	private String name;
-	
-	
 	private String cuil;
-	
-	
 	private String address;
-	
-	
 	private Float coordX;
-	
-	
 	private Float coordY;
 	
-	/*
-	@OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	*/
+	@BsonIgnore
 	private List<Product> products = new ArrayList<>();
 
 	public Supplier() {		
 	}
 	
 	public Supplier(String name, String cuil, String address, Float coordX, Float coordY) {
-		ObjectId id = new ObjectId();
-		this.setObjectId(id);
 		this.setName(name);
 		this.setCuil(cuil);
 		this.setAddress(address);
@@ -71,12 +59,11 @@ public class Supplier implements PersistentObject{
 	}
 	
 	public ObjectId getObjectId() {
-		ObjectId id = new ObjectId(this.id);
-		return id;
+		return this.objectId;
 	}
 	
 	public void setObjectId(ObjectId id) {
-		this.id = id.toString();
+		this.objectId = id;
 	}
 	public String getName() {
 		return this.name;

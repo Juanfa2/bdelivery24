@@ -16,19 +16,12 @@ import ar.edu.unlp.info.bd2.mongo.PersistentObject;
 
 public class Price {
 	
-	@BsonIgnore
-	private String id;
 	
-
 	private Float price;
 	
 	
 	private Date startDate;
 	
-	/*
-	@ManyToOne
-	@JoinColumn(name="product_id")
-	*/
 	@BsonIgnore
 	private Product products;
 	
@@ -42,10 +35,7 @@ public class Price {
 		this.setStartDate(startDate);
 	}
 	public Price (Product product, Float price, Date startDate) {
-		/*
-		ObjectId id = new ObjectId();
-		this.setObjectId(id);
-		*/
+		
 		this.setPrice(price);
 		this.setStartDate(startDate);
 		this.setProduct(product);
@@ -66,16 +56,6 @@ public class Price {
 		return this.startDate;
 	}
 	
-	/*
-	public ObjectId getObjectId() {
-		ObjectId id = new ObjectId(this.id);
-		return id;
-	}
-	
-	public void setObjectId(ObjectId id) {
-		this.id = id.toString();
-	}
-	*/
 	
 	public Product getProduct() {
 		return products;

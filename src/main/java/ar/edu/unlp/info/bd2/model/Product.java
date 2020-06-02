@@ -13,36 +13,17 @@ import org.bson.codecs.pojo.annotations.*;
 public class Product implements PersistentObject{
 	
 	@BsonId
-	private String id;
-	
-	
+	private ObjectId objectId;
+
 	private String name;
-	
-	/*
-	@OneToMany(mappedBy = "products", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	*/
-	//@BsonIgnore
 	private List<Price> prices = new ArrayList<>();
 	
-	
-	/*
-	@OneToMany(  mappedBy = "producto", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	*/
+	@BsonIgnore
 	private List<OrderProduct> orderProduct = new ArrayList<>();
 	
-	
 	private Float price ;
-	
-	
 	private Float weight;
-
-	
 	private Date date;
-	
-	/*
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "supplier")
-	*/
 	private Supplier supplier;
 	
 	
@@ -56,16 +37,19 @@ public class Product implements PersistentObject{
 		Calendar cal = Calendar.getInstance();
 		Date startDate = cal.getTime();
 		ObjectId id = new ObjectId();
+		this.setObjectId(id);
+		
 		this.setName(name);
 		this.setPrice(price);
 		this.setWeight(weight);
 		this.setSupplier(supplier);
-		this.setObjectId(id);
 		this.prices.add(new Price(price,startDate));
 	}
 	public Product (String name, Float price, Float weight, Supplier supplier, Date date) {
+		
 		ObjectId id = new ObjectId();
 		this.setObjectId(id);
+		
 		this.setName(name);
 		this.setPrice(price);
 		this.setWeight(weight);
@@ -104,6 +88,10 @@ public class Product implements PersistentObject{
 		return this.prices;
 	}
 	
+	public void setPrices(List<Price> prices) {
+		this.prices = prices;
+	}
+	
 	
 	public Float getWeight() {
 		return this.weight;
@@ -113,12 +101,11 @@ public class Product implements PersistentObject{
 	}
 	
 	public ObjectId getObjectId() {
-		ObjectId id = new ObjectId(this.id);
-		return id;
+		return this.objectId;
 	}
 	
 	public void setObjectId(ObjectId id) {
-		this.id = id.toString();
+		this.objectId = id;
 	}
 	
 	public List<OrderProduct> getOrderProduct() {
