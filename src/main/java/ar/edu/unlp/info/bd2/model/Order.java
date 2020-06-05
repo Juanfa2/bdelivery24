@@ -21,6 +21,7 @@ public class Order implements PersistentObject{
 	private Float coordX;
 	private Float coordY;
 	private Float totalAmount;
+	private Float amount;
 
 	
 	private String actualStatus;
@@ -175,7 +176,7 @@ public class Order implements PersistentObject{
 
 	public void addOrderProduct(OrderProduct orderProduct) {
 		this.products.add(orderProduct);
-		//this.setTotalAmount(getAmount());
+		this.setAmount(this.obtenerAmount());
 	}
 	
 
@@ -216,17 +217,23 @@ public class Order implements PersistentObject{
 		this.setActualStatus();
 	}
 
-	/*
-	public Float getAmount(){
-		//float amount = (float) 0;
-		//this.getProducts().forEach(p -> amount =+ p.getCuantity() * p.getProduct().getPrice());
-		List<OrderProduct> op = this.getOrderProduct();
+	*/
+	public void setAmount(Float amount) {
+		this.amount = amount;
+	}
+	
+	public Float obtenerAmount() {
+		List<OrderProduct> op = this.getProducts();
 		float sum = 0;
 		for(int i = 0; i < op.size(); i++)
-			sum += op.get(i).getCuantity() * (op.get(i).getProduct().getPriceAt(this.getDateOfOrder()));
+			sum += op.get(i).getCuantity() * (op.get(i).getProduct().getPrice());
+			//sum += op.get(i).getCuantity() * (op.get(i).getProduct().getPriceAt(this.getDateOfOrder()));
 		return sum;
-
 	}
+	public Float getAmount(){
+		return this.amount;
+	}
+/*
 
 	public Float getCurrentAmount(){
 		//float amount = (float) 0;
