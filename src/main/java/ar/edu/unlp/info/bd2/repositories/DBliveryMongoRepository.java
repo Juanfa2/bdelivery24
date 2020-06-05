@@ -7,6 +7,11 @@ import static com.mongodb.client.model.Filters.regex;
 import ar.edu.unlp.info.bd2.model.*;
 import ar.edu.unlp.info.bd2.mongo.*;
 import com.mongodb.client.*;
+import com.mongodb.client.model.Accumulators;
+import com.mongodb.client.model.Aggregates;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Sorts;
+
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -137,10 +142,101 @@ public class DBliveryMongoRepository {
     	return Optional.ofNullable(user);
     }
 	
-	public FindIterable<Product>  getProductsByName(String name){
-		FindIterable<Product> product =  this.getDb().getCollection("Product", Product.class).find(regex("name", name));
+	public List<Product>  getProductsByName(String name){
+		FindIterable<Product> products =  this.getDb().getCollection("Product", Product.class).find(regex("name", name));
+		List<Product> productos = new ArrayList<>();
+		MongoCursor<Product> prod = products.iterator();
+		while(prod.hasNext()) {
+			productos.add(prod.next());
+		}
+		return productos;
+	}
+	
+	/*--------------------- PARTE 2 ------------------*/
+	
+	public List<Order> getAllOrdersMadeByUser(String username){
+		FindIterable<Order> orders =  this.getDb().getCollection("Order", Order.class).find(eq("client.username", username));
+		List<Order> listOrders = new ArrayList<>();
+		MongoCursor<Order> ord = orders.iterator();
+		while(ord.hasNext()) {
+			listOrders.add(ord.next());
+		}
+		return listOrders;
+	}
+	
+	public Product getMaxWeigth() {
+		Bson filter = eq("weight", -1);
+		Product product = this.getDb().getCollection("Product", Product.class).find().sort(Sorts.descending("weight")).first();
 		return product;
 	}
-
+	
+	
+	public List<Order> getPendingOrders(){
+		FindIterable<Order> orders =  this.getDb().getCollection("Order", Order.class).find(eq("actualStatus", "Pending"));
+		List<Order> listOrders = new ArrayList<>();
+		MongoCursor<Order> ord = orders.iterator();
+		while(ord.hasNext()) {
+			listOrders.add(ord.next());
+		}
+		return listOrders;	
+	}
+	
+	public List<Order> getSentOrders() {
+		FindIterable<Order> orders =  this.getDb().getCollection("Order", Order.class).find(eq("actualStatus", "Sent"));
+		List<Order> listOrders = new ArrayList<>();
+		MongoCursor<Order> ord = orders.iterator();
+		while(ord.hasNext()) {
+			listOrders.add(ord.next());
+		}
+		return listOrders;	
+	}
+	
+	public List<Order> getDeliveredOrdersInPeriod(Date startDate, Date endDate){
+		Bson filter = Filters.and(
+				Filters.eq("$gte",startDate),
+				Filters.eq("$lte", endDate)
+				);
+		
+		Bson query = Filters.and(
+				Filters.eq("actualStatus", "Delivered"),
+				Filters.eq("dateOfOrder",filter)
+				);
+		FindIterable<Order> orders =  this.getDb().getCollection("Order", Order.class).find(query);
+		List<Order> listOrders = new ArrayList<>();
+		MongoCursor<Order> ord = orders.iterator();
+		while(ord.hasNext()) {
+			listOrders.add(ord.next());
+		}
+		return listOrders;	
+	}
+	
+	public List<Order> getDeliveredOrdersForUser(String username){
+		Bson query = Filters.and(
+				Filters.eq("actualStatus", "Delivered"),
+				Filters.eq("client.username",username)
+				);
+		FindIterable<Order> orders =  this.getDb().getCollection("Order", Order.class).find(query);
+		List<Order> listOrders = new ArrayList<>();
+		MongoCursor<Order> ord = orders.iterator();
+		while(ord.hasNext()) {
+			listOrders.add(ord.next());
+		}
+		return listOrders;	
+		
+	}
+	
+	public List<Product> getProductsOnePrice(){
+		Bson query = eq("prices", eq("$size",1));
+		FindIterable<Product> products =  this.getDb().getCollection("Product", Product.class).find(query);
+		List<Product> listProducts = new ArrayList<>();
+		MongoCursor<Product> prod = products.iterator();
+		while(prod.hasNext()) {
+			listProducts.add(prod.next());
+		}
+		return listProducts;	
+		
+	}
+	
+	
 
 }

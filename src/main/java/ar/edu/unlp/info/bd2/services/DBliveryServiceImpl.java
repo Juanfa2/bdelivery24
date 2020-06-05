@@ -119,8 +119,16 @@ public class DBliveryServiceImpl implements DBliveryService{
 
 	@Override
 	public Order deliverOrder(ObjectId order, User deliveryUser, Date date) throws DBliveryException {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<Order> oldOrder = this.repository.getOrderById(order);
+		Order newOrder = oldOrder.get();
+		if(newOrder.getActualStatus().equals("Pending") && newOrder.getProducts().size() > 0){
+			newOrder.setDeliveryUser(deliveryUser);
+			newOrder.sentOrder(date);
+			this.repository.updateOrder(newOrder,order);
+			return newOrder;
+		}else {
+			throw new DBliveryException("The order can't be delivered");
+		}
 	}
 
 	@Override
@@ -138,8 +146,15 @@ public class DBliveryServiceImpl implements DBliveryService{
 
 	@Override
 	public Order cancelOrder(ObjectId order, Date date) throws DBliveryException {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<Order> oldOrder = this.repository.getOrderById(order);
+		Order newOrder = oldOrder.get();
+		if(newOrder.getActualStatus().equals("Pending")){
+			newOrder.cancelOrder(date);
+			this.repository.updateOrder(newOrder,order);
+			return newOrder;
+		}else {
+			throw new DBliveryException("The order can't be cancelled");
+		}
 	}
 
 	@Override
@@ -157,8 +172,15 @@ public class DBliveryServiceImpl implements DBliveryService{
 
 	@Override
 	public Order finishOrder(ObjectId order, Date date) throws DBliveryException {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<Order> oldOrder = this.repository.getOrderById(order);
+		Order newOrder = oldOrder.get();
+		if(newOrder.getActualStatus().equals("Sent")){
+			newOrder.deliveredOrder(date);
+			this.repository.updateOrder(newOrder,order);
+			return newOrder;
+		}else {
+			throw new DBliveryException("The order can't be finished");
+		}
 	}
 
 	@Override
@@ -206,13 +228,77 @@ public class DBliveryServiceImpl implements DBliveryService{
 
 	@Override
 	public List<Product> getProductsByName(String name) {
-		FindIterable<Product>  products = this.repository.getProductsByName(name);
-		List<Product> productos = new ArrayList<>();
-		MongoCursor<Product> prod = products.iterator();
-		while(prod.hasNext()) {
-			productos.add(prod.next());
-		}
-		return productos;
+		List<Product>  products = this.repository.getProductsByName(name);
+		return products;
+	}
+	
+	/*------------------PARTE 2 ------------------*/
+
+	@Override
+	public List<Order> getAllOrdersMadeByUser(String username) throws DBliveryException {
+		List<Order> orders = this.repository.getAllOrdersMadeByUser(username);
+		return orders;
+	}
+
+	@Override
+	public List<Supplier> getTopNSuppliersInSentOrders(int n) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Order> getPendingOrders() {
+		List<Order> orders = this.repository.getPendingOrders();
+		return orders;
+	}
+
+	@Override
+	public List<Order> getSentOrders() {
+		List<Order> orders = this.repository.getSentOrders();
+		return orders;
+	}
+
+	@Override
+	public List<Order> getDeliveredOrdersInPeriod(Date startDate, Date endDate) {
+		List<Order> orders = this.repository. getDeliveredOrdersInPeriod(startDate, endDate);
+		return orders;
+	}
+
+	@Override
+	public List<Order> getDeliveredOrdersForUser(String username) {
+		List<Order> orders = this.repository.getDeliveredOrdersForUser(username);
+		return orders;
+		
+	}
+
+	@Override
+	public Product getBestSellingProduct() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Product> getProductsOnePrice() {
+		List<Product> products = this.repository.getProductsOnePrice();
+		return products;
+	}
+
+	@Override
+	public List<Product> getSoldProductsOn(Date day) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Product getMaxWeigth() {
+		Product product = this.repository.getMaxWeigth();
+		return product;
+	}
+
+	@Override
+	public List<Order> getOrderNearPlazaMoreno() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	

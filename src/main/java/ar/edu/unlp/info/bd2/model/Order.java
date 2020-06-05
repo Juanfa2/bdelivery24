@@ -6,6 +6,9 @@ import java.util.*;
 
 import org.bson.types.ObjectId;
 
+import com.mongodb.client.model.geojson.Point;
+import com.mongodb.client.model.geojson.Position;
+
 import ar.edu.unlp.info.bd2.config.AppConfig;
 import ar.edu.unlp.info.bd2.mongo.PersistentObject;
 import org.bson.codecs.pojo.annotations.*;
@@ -23,6 +26,8 @@ public class Order implements PersistentObject{
 	private Float totalAmount;
 	private Float amount;
 
+	/*NUEVO*/
+	private Point position;
 	
 	private String actualStatus;
 	
@@ -51,6 +56,8 @@ public class Order implements PersistentObject{
 		this.setStatus(this.status);
 		OrderStatus status = this.status.get(this.status.size()-1);
 		this.setActualStatus(status.getStatus());
+		Position pos = new Position(coordX, coordY);
+		this.position = new Point(pos);
 		
 
 	}
@@ -186,38 +193,35 @@ public class Order implements PersistentObject{
 		this.addStatus(orderS);
 	}
 	
-	/*
+	
 	public void cancelOrder(Date date){
-		OrderStatus orderS = this.orderStatus.get(orderStatus.size()-1);
-		orderS.cancelarOrder(date);
-		this.setActualStatus();
+		OrderStatus orderS = new Cancelled(date);
+		this.addStatus(orderS);
 	}
-	*/
+	
 
 	public void sentOrder(){
 		OrderStatus orderS = new Sent();
 		this.addStatus(orderS);
 	}
-	/*
+	
 	public void sentOrder(Date date){
-		OrderStatus orderS = this.orderStatus.get(orderStatus.size()-1);
-		orderS.enviarOrder(date);
-		this.setActualStatus();
+		OrderStatus orderS = new Sent(date);
+		this.addStatus(orderS);
 	}
-	*/
+	
 	public void deliveredOrder(){
 		OrderStatus orderS = new Delivered();
 		this.addStatus(orderS);
 	}
 	
-	/*
+	
 	public void deliveredOrder(Date date){
-		OrderStatus orderS = this.orderStatus.get(orderStatus.size()-1);
-		orderS.entregarOrder(date);
-		this.setActualStatus();
+		OrderStatus orderS = new Delivered(date);
+		this.addStatus(orderS);
 	}
 
-	*/
+	
 	public void setAmount(Float amount) {
 		this.amount = amount;
 	}
