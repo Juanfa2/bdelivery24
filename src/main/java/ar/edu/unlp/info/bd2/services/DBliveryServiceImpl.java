@@ -285,8 +285,8 @@ public class DBliveryServiceImpl implements DBliveryService{
 
 	@Override
 	public List<Product> getSoldProductsOn(Date day) {
-		// TODO Auto-generated method stub
-		return null;
+        List<Product> products = this.repository.getSoldProductsOn(day);
+		return products;
 	}
 
 	@Override

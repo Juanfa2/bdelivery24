@@ -236,7 +236,20 @@ public class DBliveryMongoRepository {
 		return listProducts;	
 		
 	}
-	
-	
 
+
+	public List<Product> getSoldProductsOn(Date date) {
+		Bson query = Filters.and(
+				Filters.eq("dateOfOrder",date)
+		);
+		FindIterable<Order> orders =  this.getDb().getCollection("Order", Order.class).find(query);
+		List<OrderProduct> listop = new ArrayList<>();
+		MongoCursor<Order> o = orders.iterator();
+		while(o.hasNext()) {
+			List<OrderProduct> orderListop =o.next().getProducts();
+			listop.addAll(orderListop);
+		}
+		List<Product> listProducts = listop.stream().map(property -> property.getProduct()).collect(Collectors.toList());
+		return listProducts;
+	}
 }
