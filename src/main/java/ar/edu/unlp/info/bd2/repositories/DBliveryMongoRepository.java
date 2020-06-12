@@ -101,6 +101,12 @@ public class DBliveryMongoRepository {
     	return product;
     }
     
+    public Supplier findSupplierById(ObjectId id) {
+    	
+    	Supplier supplier = this.getDb().getCollection("Supplier", Supplier.class).find(eq("_id", id)).first();
+    	return supplier;
+    }
+    
     public void createOrder(Order order) {
     	this.getDb().getCollection("Order", Order.class).insertOne(order);
     }
@@ -251,5 +257,53 @@ public class DBliveryMongoRepository {
 		}
 		List<Product> listProducts = listop.stream().map(property -> property.getProduct()).collect(Collectors.toList());
 		return listProducts;
+	}
+	
+	public Product getBestSellingProduct() {
+		
+		Document product = this.getDb()
+        .getCollection("Order")
+        .aggregate(
+                Arrays.asList(
+                        unwind("$products"),
+                        project(eq("products", 1)),
+                        group("$products.product._id", Accumulators.sum("cant", 1)),
+                        sort(Sorts.descending("cant")))).first();
+		
+		ObjectId id = (ObjectId) product.get("_id") ;
+		Product prod = this.findProductById(id);
+	
+		return prod;
+	}
+	
+	public List<Supplier> getTopNSuppliersInSentOrders (int n) {
+		
+		AggregateIterable<Document> suplier = this.getDb()
+		        .getCollection("Order")
+		        .aggregate(
+		                Arrays.asList(
+		                        unwind("$products"),
+		                        project(eq("products", 1)),
+		                        group("$products.product.supplier._id", Accumulators.sum("cant", 1)),
+		                        sort(Sorts.descending("cant")),
+		                        limit(n)));
+		
+		List<Supplier> listSuppliers = new ArrayList<>();
+		MongoCursor<Document> prod = suplier.iterator();
+		while(prod.hasNext()) {
+			ObjectId id = (ObjectId) prod.next().get("_id");
+			Supplier sup = this.findSupplierById(id);
+			listSuppliers.add(sup);
+		}
+		
+		
+		/*
+		aggregate([{$unwind:"$products"},
+		{$project:{supplier:1,products:1}}, 
+		{$group: {_id:"$products.product.supplier._id" ,cant:{$sum:1} }}, 
+		{$sort:{cant: -1}}])
+		*/
+		
+		return listSuppliers;
 	}
 }

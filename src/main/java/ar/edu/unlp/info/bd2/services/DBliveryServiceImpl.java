@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
+import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCursor;
 
@@ -242,8 +243,8 @@ public class DBliveryServiceImpl implements DBliveryService{
 
 	@Override
 	public List<Supplier> getTopNSuppliersInSentOrders(int n) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Supplier> suppliers = this.repository.getTopNSuppliersInSentOrders(n);
+		return suppliers;
 	}
 
 	@Override
@@ -273,8 +274,9 @@ public class DBliveryServiceImpl implements DBliveryService{
 
 	@Override
 	public Product getBestSellingProduct() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		Product product = this.repository.getBestSellingProduct();
+		return product;
 	}
 
 	@Override
