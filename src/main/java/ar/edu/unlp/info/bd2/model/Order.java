@@ -258,6 +258,12 @@ public class Order implements PersistentObject{
 	}
 	}
 	*/
+	public Point getPosition() {
+		return position;
+	}
+	public void setPosition(Point position) {
+		this.position = position;
+	}
 	
 	
 

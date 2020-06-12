@@ -11,6 +11,8 @@ import com.mongodb.client.model.Accumulators;
 import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Sorts;
+import com.mongodb.client.model.geojson.Point;
+import com.mongodb.client.model.geojson.Position;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -305,5 +307,17 @@ public class DBliveryMongoRepository {
 		*/
 		
 		return listSuppliers;
+	}
+	
+	public List<Order> getOrderNearPlazaMoreno() {
+		Point newPoint = new Point(new Position(-34.921236,-57.954571));
+		FindIterable<Order> result = this.getDb().getCollection("Order", Order.class).find(
+				Filters.near("position", newPoint,400.0, 0.0));
+		List<Order> listOrders = new ArrayList<>();
+		MongoCursor<Order> ord = result.iterator();
+		while(ord.hasNext()) {
+			listOrders.add(ord.next());
+		}
+		return listOrders;
 	}
 }

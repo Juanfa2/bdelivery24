@@ -299,8 +299,8 @@ public class DBliveryServiceImpl implements DBliveryService{
 
 	@Override
 	public List<Order> getOrderNearPlazaMoreno() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Order> orders = this.repository.getOrderNearPlazaMoreno();
+		return orders;
 	}
 
 	
