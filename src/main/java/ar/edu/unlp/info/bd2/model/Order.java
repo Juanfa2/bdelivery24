@@ -2,8 +2,7 @@ package ar.edu.unlp.info.bd2.model;
 import javax.persistence.*;
 
 import java.util.*;
-import ar.edu.unlp.info.bd2.config.AppConfig;
-import ar.edu.unlp.info.bd2.config.HibernateConfiguration;
+
 
 @Entity
 @Table(name="orders")
@@ -158,7 +157,7 @@ public class Order {
 
 	public void addOrderProduct(OrderProduct orderProduct) {
 		this.orderProduct.add(orderProduct);
-		this.setTotalAmount(getAmount());
+		//this.setTotalAmount(getAmount());
 	}
 
 	public void updateOrderStatus(OrderStatus orderStatus) {
@@ -173,8 +172,8 @@ public class Order {
 
 	}
 
-	public OrderStatus getActualStatus(){
-		return this.actualStatus;
+	public String getActualStatus(){
+		return this.actualStatus.getStatus();
 	}
 
 
@@ -209,7 +208,7 @@ public class Order {
 		orderS.entregarOrder(date);
 		this.setActualStatus();
 	}
-
+	/*
 	public Float getAmount(){
 		//float amount = (float) 0;
 		//this.getProducts().forEach(p -> amount =+ p.getCuantity() * p.getProduct().getPrice());
@@ -220,6 +219,7 @@ public class Order {
 		return sum;
 
 	}
+	*/
 
 	public Float getCurrentAmount(){
 		//float amount = (float) 0;

@@ -3,8 +3,7 @@ import javax.persistence.*;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
-import ar.edu.unlp.info.bd2.config.AppConfig;
-import ar.edu.unlp.info.bd2.config.HibernateConfiguration;
+
 
 
 @Entity
