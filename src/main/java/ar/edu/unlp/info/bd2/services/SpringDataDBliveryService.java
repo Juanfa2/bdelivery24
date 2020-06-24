@@ -83,8 +83,8 @@ public class SpringDataDBliveryService implements DBliveryService {
 
 	@Override
 	public List<Product> getSoldProductsOn(Date day) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Product> products = this.productRepository.findSoldOn(day);
+		return products;
 	}
 
 	@Override
