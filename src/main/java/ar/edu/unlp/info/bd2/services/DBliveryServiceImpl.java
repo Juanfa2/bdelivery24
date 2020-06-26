@@ -287,7 +287,7 @@ public class DBliveryServiceImpl implements DBliveryService{
 
 	@Override
 	public List<Product> getSoldProductsOn(Date day) {
-        List<Product> products = this.repository.getSoldProductsOn(day);
+		List<Product> products = this.repository.getSoldProductsOn(day);
 		return products;
 	}
 
