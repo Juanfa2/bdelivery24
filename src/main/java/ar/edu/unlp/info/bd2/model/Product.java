@@ -112,8 +112,10 @@ public class Product {
 	public void updatePrice(Price price) {
 		this.setPrice(price.getPrice());
 		this.prices.add(price);
+		
+		
 	}
-
+/*
 	public Float getPriceAt(Date date){
 		List<Price> p = this.getPrices();
 		Date datMax = new Date(0);
@@ -127,5 +129,9 @@ public class Product {
 			}
 		}
 		return price;
+	}
+*/
+	public void setPrices(List<Price> prices) {
+		this.prices = prices;
 	}
 }
