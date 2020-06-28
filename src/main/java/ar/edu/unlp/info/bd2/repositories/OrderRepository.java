@@ -22,4 +22,6 @@ public interface OrderRepository extends CrudRepository<Order, Long>{
 	public List<Order> getDeliveredOrdersInPeriod(@Param("start")Date start, @Param("end") Date end);
 	*/
 	public List<Order> findByActualStatusStatusAndActualStatusStartDateBetween(String status, Date start, Date end);
+
+	public List<Order> findByActualStatusStatusAndClientUsername(String delivered, String username);
 }

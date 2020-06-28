@@ -19,7 +19,9 @@ public interface ProductRepository extends CrudRepository<Product, Long>{
 			"WHERE os.order = op.orderP AND " +
 			"os.startDate = :day AND os.status = Pending")
 	public List<Product> findSoldOn(@Param("day") Date day);
-	
 
 	public Product findFirstByOrderByWeightDesc();
+
+	@Query(value = "select p.products from Price p  group by p.products having count (p.products) = 1")
+	List<Product> findByOnlyOnePrice();
 }

@@ -72,14 +72,14 @@ public class SpringDataDBliveryService implements DBliveryService {
 
 	@Override
 	public List<Order> getDeliveredOrdersForUser(String username) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Order> orders = this.orderRepository.findByActualStatusStatusAndClientUsername("Delivered",username);
+		return orders;
 	}
 
 	@Override
 	public List<Product> getProductsOnePrice() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Product> products = this.productRepository.findByOnlyOnePrice();
+		return products;
 	}
 
 	@Override
